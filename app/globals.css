@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-festive: 'Georgia', 'Times New Roman', serif;
+}
+
+/* App background inspired by the provided design */
+body {
+  background:
+    radial-gradient(1100px 540px at 60% -10%, rgba(0, 230, 210, 0.22), transparent 60%),
+    radial-gradient(900px 520px at 20% 0%, rgba(0, 180, 160, 0.18), transparent 55%),
+    linear-gradient(180deg, #07101B 0%, #0B1220 40%, #0A101B 100%);
+  min-height: 100vh;
+  color: #E6EEF8;
+}
+
+/* Component classes moved to Tailwind plugin in tailwind.config.ts */
+
