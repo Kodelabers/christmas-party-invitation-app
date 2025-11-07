@@ -16,5 +16,28 @@ body {
   color: #E6EEF8;
 }
 
+@keyframes snowfall {
+  0% {
+    transform: translate3d(0, -120%, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate3d(12px, 0, 0) rotate(180deg);
+  }
+  100% {
+    transform: translate3d(-12px, 120vh, 0) rotate(360deg);
+  }
+}
+
+.snowflake {
+  position: absolute;
+  top: -5%;
+  color: #00CCBB;
+  text-shadow: 0 0 12px rgba(0, 204, 187, 0.45);
+  animation-name: snowfall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  filter: drop-shadow(0 0 6px rgba(0, 204, 187, 0.6));
+}
+
 /* Component classes moved to Tailwind plugin in tailwind.config.ts */
 

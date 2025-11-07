@@ -5,6 +5,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { supabase, type Response } from '@/lib/supabase';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import Snowflakes from '@/components/Snowflakes';
 
 function HomeContent() {
   const searchParams = useSearchParams();
@@ -93,16 +94,16 @@ function HomeContent() {
   if (!isValid) {
     return (
       <div className="min-h-screen flex flex-col">
+        <Snowflakes />
         <div className="flex-1 flex items-center justify-center px-4">
           <div className="text-center card p-8 max-w-md w-full">
             <Header />
-            <div className="mt-8">
+            <div className="mt-4">
               <p className="text-xl md:text-2xl text-red-400 font-semibold mb-2">
-                This invitation is not valid 🎁
+                This invitation is not valid!
               </p>
               <p className="text-brand-muted">Please contact the organizers if you believe this is a mistake.</p>
             </div>
-            <Footer />
           </div>
         </div>
       </div>
@@ -111,6 +112,7 @@ function HomeContent() {
 
   return (
     <div className="min-h-screen flex flex-col">
+      <Snowflakes />
       <div className="flex-1 flex items-center justify-center px-4 py-12">
         <div className="text-center card card-contrast p-8 md:p-12 max-w-xl w-full">
           <Header />

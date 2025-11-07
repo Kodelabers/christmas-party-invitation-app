@@ -1,33 +1,41 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useMemo } from 'react';
+
+type SnowflakeConfig = {
+  id: number;
+  left: string;
+  delay: string;
+  duration: string;
+  size: string;
+  opacity: number;
+};
 
 export default function Snowflakes() {
-  const [snowflakes, setSnowflakes] = useState<number[]>([]);
-
-  useEffect(() => {
-    const count = 50;
-    const flakes = Array.from({ length: count }, (_, i) => i);
-    setSnowflakes(flakes);
+  const flakes = useMemo<SnowflakeConfig[]>(() => {
+    const count = 24;
+    return Array.from({ length: count }, (_, id) => ({
+      id,
+      left: `${Math.random() * 100}%`,
+      delay: `${Math.random() * 8}s`,
+      duration: `${12 + Math.random() * 18}s`,
+      size: `${12 + Math.random() * 28}px`,
+      opacity: 0.25 + Math.random() * 0.35,
+    }));
   }, []);
 
   return (
-    <>
-      {snowflakes.map((flake) => (
-        <div
-          key={flake}
+    <div className="pointer-events-none fixed inset-0 overflow-hidden">
+      {flakes.map(({ id, left, delay, duration, size, opacity }) => (
+        <span
+          key={id}
           className="snowflake"
-          style={{
-            left: `${Math.random() * 100}%`,
-            animationDuration: `${10 + Math.random() * 20}s`,
-            animationDelay: `${Math.random() * 5}s`,
-            fontSize: `${10 + Math.random() * 20}px`,
-          }}
+          style={{ left, animationDelay: delay, animationDuration: duration, fontSize: size, opacity }}
         >
           ❄
-        </div>
+        </span>
       ))}
-    </>
+    </div>
   );
 }
 

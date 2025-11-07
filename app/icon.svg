@@ -1,0 +1,27 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="icon-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#061320" />
+      <stop offset="100%" stop-color="#0B2330" />
+    </linearGradient>
+    <linearGradient id="icon-accent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00ACBA" />
+      <stop offset="100%" stop-color="#B3D342" />
+    </linearGradient>
+  </defs>
+
+  <rect x="32" y="32" width="448" height="448" rx="120" fill="url(#icon-bg)" />
+  <path d="M180 176 L120 256 L180 336" stroke="#00E6D2" stroke-width="26" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+  <path d="M332 176 L392 256 L332 336" stroke="#7CF3E6" stroke-width="26" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+
+  <g stroke="url(#icon-accent)" stroke-width="18" stroke-linecap="round">
+    <line x1="256" y1="180" x2="256" y2="332" />
+    <line x1="222" y1="208" x2="290" y2="304" />
+    <line x1="290" y1="208" x2="222" y2="304" />
+    <line x1="256" y1="220" x2="256" y2="292" stroke-width="10" />
+  </g>
+
+  <circle cx="256" cy="128" r="24" fill="url(#icon-accent)" opacity="0.75" />
+  <circle cx="256" cy="384" r="20" fill="#00E6D2" opacity="0.5" />
+</svg>
+

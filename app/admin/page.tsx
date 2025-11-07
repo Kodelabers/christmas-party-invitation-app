@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { supabase, type ResponseRecord } from '@/lib/supabase';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-// Snowflakes removed for a cleaner admin look
+import Snowflakes from '@/components/Snowflakes';
 
 export default function AdminPage() {
   const router = useRouter();
@@ -16,6 +16,12 @@ export default function AdminPage() {
   const [loginError, setLoginError] = useState('');
   const [responses, setResponses] = useState<ResponseRecord[]>([]);
   const [loadingResponses, setLoadingResponses] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
+  const pageSize = 20;
+  const [newEmail, setNewEmail] = useState('');
+  const [addEmailError, setAddEmailError] = useState('');
+  const [addEmailSuccess, setAddEmailSuccess] = useState('');
 
   useEffect(() => {
     checkAuth();
@@ -51,7 +57,7 @@ export default function AdminPage() {
       // Set authentication
       sessionStorage.setItem('admin_authenticated', 'true');
       setIsAuthenticated(true);
-      loadResponses();
+      loadResponses(1);
     } catch (error) {
       console.error('Login error:', error);
       setLoginError('An error occurred during login');
@@ -62,23 +68,80 @@ export default function AdminPage() {
     sessionStorage.removeItem('admin_authenticated');
     setIsAuthenticated(false);
     setResponses([]);
+    setCurrentPage(1);
+    setTotalCount(0);
+    setNewEmail('');
+    setAddEmailError('');
+    setAddEmailSuccess('');
   };
 
-  const loadResponses = async () => {
+  const loadResponses = async (page = 1) => {
     setLoadingResponses(true);
     try {
-      const { data, error } = await supabase
+      const from = (page - 1) * pageSize;
+      const to = from + pageSize - 1;
+
+      const { data, error, count } = await supabase
         .from('responses')
-        .select('*')
-        .order('updated_at', { ascending: false });
+        .select('*', { count: 'exact' })
+        .order('updated_at', { ascending: false })
+        .range(from, to);
 
       if (error) throw error;
 
       setResponses(data || []);
+      if (typeof count === 'number') {
+        setTotalCount(count);
+      }
+      setCurrentPage(page);
     } catch (error) {
       console.error('Error loading responses:', error);
     } finally {
       setLoadingResponses(false);
+    }
+  };
+
+  const totalPages = Math.max(1, Math.ceil(totalCount / pageSize));
+
+  const handlePageChange = (page: number) => {
+    if (page < 1 || page > totalPages || page === currentPage) return;
+    loadResponses(page);
+  };
+
+  const handleAddEmail = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setAddEmailError('');
+    setAddEmailSuccess('');
+
+    const trimmedEmail = newEmail.trim().toLowerCase();
+    const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+
+    if (!emailRegex.test(trimmedEmail)) {
+      setAddEmailError('Please enter a valid email address.');
+      return;
+    }
+
+    try {
+      const { error } = await supabase
+        .from('responses')
+        .insert({ email: trimmedEmail, response: null, updated_at: new Date().toISOString() });
+
+      if (error) {
+        if (error.code === '23505') {
+          setAddEmailError('This email is already invited.');
+        } else {
+          console.error('Add email error:', error);
+          setAddEmailError('Unable to add this email right now. Please try again.');
+        }
+        return;
+      }
+
+      setAddEmailSuccess('Email added successfully.');
+      setNewEmail('');
+      loadResponses(1);
+    } catch (err) {
+      console.error('Add email error:', err);
+      setAddEmailError('Unable to add this email right now. Please try again.');
     }
   };
 
@@ -97,6 +160,7 @@ export default function AdminPage() {
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen flex flex-col">
+        <Snowflakes />
         <div className="flex-1 flex items-center justify-center px-4 py-12">
           <div className="card card-contrast p-8 md:p-10 max-w-md w-full text-brand-text">
             <Header />
@@ -148,6 +212,7 @@ export default function AdminPage() {
 
   return (
     <div className="min-h-screen flex flex-col">
+      <Snowflakes />
       <div className="flex-1 px-4 py-12">
         <div className="max-w-7xl mx-auto">
           <div className="card p-8 md:p-12">
@@ -159,6 +224,36 @@ export default function AdminPage() {
               >
                 Logout
               </button>
+            </div>
+
+            <div className="card bg-brand-card/60 border border-brand-border p-6 mb-8">
+              <h2 className="text-2xl font-semibold text-brand-text mb-4">Add guest</h2>
+              <p className="text-sm text-brand-muted mb-4">
+              Enter the guest’s email address to allow them access to the invitation page. Duplicate emails are ignored.
+              </p>
+              <form onSubmit={handleAddEmail} className="flex flex-col sm:flex-row gap-3">
+                <input
+                  type="email"
+                  value={newEmail}
+                  onChange={(e) => setNewEmail(e.target.value)}
+                  placeholder="guest@example.com"
+                  className="flex-1 px-4 py-3 rounded-lg bg-transparent border border-brand-border text-brand-text placeholder:text-brand-muted focus:outline-none focus:ring-2 focus:ring-brand-primary/40"
+                  required
+                />
+                <button
+                  type="submit"
+                  className="btn-primary text-black transition px-6 py-3 disabled:opacity-50 disabled:cursor-not-allowed"
+                  disabled={loadingResponses}
+                >
+                  Add Email
+                </button>
+              </form>
+              {addEmailError && (
+                <p className="mt-3 text-sm text-red-400">{addEmailError}</p>
+              )}
+              {addEmailSuccess && (
+                <p className="mt-3 text-sm text-brand-primary">{addEmailSuccess}</p>
+              )}
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -183,43 +278,72 @@ export default function AdminPage() {
                   <div className="text-4xl animate-bounce">🎄</div>
                 </div>
               ) : (
-                <div className="overflow-x-auto">
-                  <table className="w-full border-collapse rounded-lg shadow-card border border-brand-border bg-brand-card">
-                    <thead className="bg-black/20">
-                      <tr className="text-brand-text">
-                        <th className="px-6 py-4 text-left font-semibold">Email</th>
-                        <th className="px-6 py-4 text-left font-semibold">Response</th>
-                        <th className="px-6 py-4 text-left font-semibold">Updated At</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {responses.map((response, index) => (
-                        <tr
-                          key={response.email}
-                          className={index % 2 === 0 ? 'bg-black/10' : 'bg-transparent'}
-                        >
-                          <td className="px-6 py-4 border-b border-brand-border/40">
-                            {response.email}
-                          </td>
-                          <td className="px-6 py-4 border-b border-brand-border/40">
-                            {response.response === 'Coming' ? (
-                              <span className="text-brand-primary font-semibold">Coming</span>
-                            ) : response.response === 'Not coming' ? (
-                              <span className="text-red-400 font-semibold">Not coming</span>
-                            ) : (
-                              <span className="text-brand-muted">—</span>
-                            )}
-                          </td>
-                          <td className="px-6 py-4 border-b border-brand-border/40">
-                            {response.updated_at
-                              ? new Date(response.updated_at).toLocaleString()
-                              : '—'}
-                          </td>
+                <>
+                  <div className="overflow-x-auto">
+                    <table className="w-full border-collapse rounded-lg shadow-card border border-brand-border bg-brand-card">
+                      <thead className="bg-black/20">
+                        <tr className="text-brand-text">
+                          <th className="px-6 py-4 text-left font-semibold">Email</th>
+                          <th className="px-6 py-4 text-left font-semibold">Response</th>
+                          <th className="px-6 py-4 text-left font-semibold">Updated At</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
+                      </thead>
+                      <tbody>
+                        {responses.map((response, index) => (
+                          <tr
+                            key={response.email}
+                            className={index % 2 === 0 ? 'bg-black/10' : 'bg-transparent'}
+                          >
+                            <td className="px-6 py-4 border-b border-brand-border/40">
+                              {response.email}
+                            </td>
+                            <td className="px-6 py-4 border-b border-brand-border/40">
+                              {response.response === 'Coming' ? (
+                                <span className="text-brand-primary font-semibold">Coming</span>
+                              ) : response.response === 'Not coming' ? (
+                                <span className="text-red-400 font-semibold">Not coming</span>
+                              ) : (
+                                <span className="text-brand-muted">—</span>
+                              )}
+                            </td>
+                            <td className="px-6 py-4 border-b border-brand-border/40">
+                              {response.updated_at
+                                ? new Date(response.updated_at).toLocaleString()
+                                : '—'}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <p className="text-sm text-brand-muted">
+                      {totalCount === 0
+                        ? 'No responses yet'
+                        : `Showing ${Math.min((currentPage - 1) * pageSize + 1, totalCount)}-${Math.min(currentPage * pageSize, totalCount)} of ${totalCount}`}
+                    </p>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => handlePageChange(currentPage - 1)}
+                        disabled={currentPage === 1}
+                        className="btn-outline disabled:opacity-50 disabled:cursor-not-allowed px-4 py-2"
+                      >
+                        Previous
+                      </button>
+                      <span className="text-sm text-brand-muted">
+                        Page {totalCount === 0 ? 0 : currentPage} of {totalCount === 0 ? 0 : totalPages}
+                      </span>
+                      <button
+                        onClick={() => handlePageChange(currentPage + 1)}
+                        disabled={currentPage === totalPages || totalCount === 0}
+                        className="btn-outline disabled:opacity-50 disabled:cursor-not-allowed px-4 py-2"
+                      >
+                        Next
+                      </button>
+                    </div>
+                  </div>
+                </>
               )}
             </div>
           </div>
