@@ -5,7 +5,12 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Snowflakes from '@/components/Snowflakes';
+import LogoIcon from '@/components/LogoIcon';
 import { type Response } from '@/lib/supabase';
+
+const EVENT_DATE_TEXT = '04.12.2025. | 19:00h';
+const EVENT_ADDRESS_TEXT = 'Cebini ul. 35, 10000, Buzin';
+const MAPS_URL = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(EVENT_ADDRESS_TEXT)}`;
 
 function SuccessContent() {
   const searchParams = useSearchParams();
@@ -28,8 +33,11 @@ function SuccessContent() {
 
   if (!response) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-4xl animate-bounce">🎄</div>
+      <div className="min-h-screen flex flex-col">
+        <Snowflakes />
+        <div className="flex-1 flex items-center justify-center">
+          <LogoIcon className="w-24 h-24 animate-pulse" />
+        </div>
       </div>
     );
   }
@@ -44,6 +52,31 @@ function SuccessContent() {
           <Header />
           
           <div className="mt-8 space-y-6">
+            <div className="rounded-lg border border-brand-border/50 bg-brand-card/40 p-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-left">
+                <div>
+                  <p className="text-sm text-brand-muted text-center">Date & time</p>
+                  <p className="text-base text-brand-text font-semibold text-center">{EVENT_DATE_TEXT}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-brand-muted text-center">Address</p>
+                  <p className="text-base text-brand-text font-semibold text-center">{EVENT_ADDRESS_TEXT}</p>
+                </div>
+              </div>
+              {isComing && (
+                <div className="mt-8 text-center">
+                  <a
+                    href={MAPS_URL}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="btn-primary"
+                  >
+                    Directions
+                  </a>
+                </div>
+              )}
+            </div>
+
             <div className="flex justify-center mb-6">
               {isComing ? (
                 <div className="w-20 h-20 rounded-full bg-brand-primary/20 flex items-center justify-center">
@@ -93,18 +126,10 @@ function SuccessContent() {
                 : "We've received your response. We'll miss you at the party, but thank you for taking the time to let us know."}
             </p>
 
-            {email && (
-              <div className="mt-6 p-4 rounded-lg bg-brand-card/50 border border-brand-border/50">
-                <p className="text-sm text-brand-muted">
-                  Confirmation sent to: <span className="text-brand-text font-semibold">{email}</span>
-                </p>
-              </div>
-            )}
-
             <div className="mt-8">
               <button
                 onClick={() => router.push(`/?email=${email || ''}`)}
-                className="btn-outline"
+                className="btn-outline hover:border-solid hover:border-[#00C4B4] transition"
               >
                 Back to Invitation
               </button>
@@ -121,8 +146,11 @@ function SuccessContent() {
 export default function SuccessPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-4xl animate-bounce">🎄</div>
+      <div className="min-h-screen flex flex-col">
+        <Snowflakes />
+        <div className="flex-1 flex items-center justify-center">
+          <LogoIcon className="w-24 h-24 animate-pulse" />
+        </div>
       </div>
     }>
       <SuccessContent />

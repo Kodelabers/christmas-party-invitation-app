@@ -6,6 +6,10 @@ import { supabase, type Response } from '@/lib/supabase';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Snowflakes from '@/components/Snowflakes';
+import LogoIcon from '@/components/LogoIcon';
+
+const EVENT_DATE_TEXT = '04.12.2025. | 19:00h';
+const EVENT_ADDRESS_TEXT = 'Cebini ul. 35, 10000, Buzin';
 
 function HomeContent() {
   const searchParams = useSearchParams();
@@ -85,8 +89,11 @@ function HomeContent() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-4xl animate-bounce">🎄</div>
+      <div className="min-h-screen flex flex-col">
+        <Snowflakes />
+        <div className="flex-1 flex items-center justify-center">
+          <LogoIcon className="w-24 h-24 animate-pulse" />
+        </div>
       </div>
     );
   }
@@ -117,6 +124,13 @@ function HomeContent() {
         <div className="text-center card card-contrast p-8 md:p-12 max-w-xl w-full">
           <Header />
           
+          <div className="mt-4 mb-2">
+            <p className="text-sm text-brand-muted">Date & time</p>
+            <p className="text-lg text-brand-text font-semibold">{EVENT_DATE_TEXT}</p>
+            <p className="text-sm text-brand-muted mt-4">Address</p>
+            <p className="text-lg text-brand-text font-semibold">{EVENT_ADDRESS_TEXT}</p>
+          </div>
+
           {currentResponse !== null && !showChangeConfirm ? (
             <div className="mt-8 space-y-6">
               <p className="text-xl md:text-2xl text-brand-text font-semibold mb-6">
@@ -217,8 +231,11 @@ function HomeContent() {
 export default function Home() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-4xl animate-bounce">🎄</div>
+      <div className="min-h-screen flex flex-col">
+        <Snowflakes />
+        <div className="flex-1 flex items-center justify-center">
+          <LogoIcon className="w-24 h-24 animate-pulse" />
+        </div>
       </div>
     }>
       <HomeContent />

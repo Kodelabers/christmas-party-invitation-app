@@ -18,10 +18,16 @@ body {
 
 @keyframes snowfall {
   0% {
-    transform: translate3d(0, -120%, 0) rotate(0deg);
+    transform: translate3d(0, -10vh, 0) rotate(0deg);
+  }
+  25% {
+    transform: translate3d(6px, 20vh, 0) rotate(90deg);
   }
   50% {
-    transform: translate3d(12px, 0, 0) rotate(180deg);
+    transform: translate3d(12px, 50vh, 0) rotate(180deg);
+  }
+  75% {
+    transform: translate3d(6px, 80vh, 0) rotate(270deg);
   }
   100% {
     transform: translate3d(-12px, 120vh, 0) rotate(360deg);
@@ -37,6 +43,7 @@ body {
   animation-timing-function: linear;
   animation-iteration-count: infinite;
   filter: drop-shadow(0 0 6px rgba(0, 204, 187, 0.6));
+  will-change: transform;
 }
 
 /* Component classes moved to Tailwind plugin in tailwind.config.ts */

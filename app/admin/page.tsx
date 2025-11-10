@@ -6,6 +6,7 @@ import { supabase, type ResponseRecord } from '@/lib/supabase';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Snowflakes from '@/components/Snowflakes';
+import LogoIcon from '@/components/LogoIcon';
 
 export default function AdminPage() {
   const router = useRouter();
@@ -19,6 +20,9 @@ export default function AdminPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
   const pageSize = 20;
+  const [totalComing, setTotalComing] = useState(0);
+  const [totalNotComing, setTotalNotComing] = useState(0);
+  const [totalNoResponse, setTotalNoResponse] = useState(0);
   const [newEmail, setNewEmail] = useState('');
   const [addEmailError, setAddEmailError] = useState('');
   const [addEmailSuccess, setAddEmailSuccess] = useState('');
@@ -32,6 +36,7 @@ export default function AdminPage() {
     if (adminSession === 'true') {
       setIsAuthenticated(true);
       loadResponses();
+      loadAllResponses();
     }
     setLoading(false);
   };
@@ -58,6 +63,7 @@ export default function AdminPage() {
       sessionStorage.setItem('admin_authenticated', 'true');
       setIsAuthenticated(true);
       loadResponses(1);
+      loadAllResponses();
     } catch (error) {
       console.error('Login error:', error);
       setLoginError('An error occurred during login');
@@ -101,6 +107,26 @@ export default function AdminPage() {
     }
   };
 
+  // Load total counts across the entire table (ignores pagination)
+  const loadAllResponses = async () => {
+    try {
+      const [comingRes, notComingRes, noRespRes] = await Promise.all([
+        supabase.from('responses').select('email', { count: 'exact', head: true }).eq('response', 'Coming'),
+        supabase.from('responses').select('email', { count: 'exact', head: true }).eq('response', 'Not coming'),
+        supabase.from('responses').select('email', { count: 'exact', head: true }).is('response', null),
+      ]);
+
+      setTotalComing(comingRes.count ?? 0);
+      setTotalNotComing(notComingRes.count ?? 0);
+      setTotalNoResponse(noRespRes.count ?? 0);
+    } catch (err) {
+      console.error('Error loading total counts:', err);
+      setTotalComing(0);
+      setTotalNotComing(0);
+      setTotalNoResponse(0);
+    }
+  };
+
   const totalPages = Math.max(1, Math.ceil(totalCount / pageSize));
 
   const handlePageChange = (page: number) => {
@@ -139,20 +165,22 @@ export default function AdminPage() {
       setAddEmailSuccess('Email added successfully.');
       setNewEmail('');
       loadResponses(1);
+      loadAllResponses();
     } catch (err) {
       console.error('Add email error:', err);
       setAddEmailError('Unable to add this email right now. Please try again.');
     }
   };
 
-  const comingCount = responses.filter(r => r.response === 'Coming').length;
-  const notComingCount = responses.filter(r => r.response === 'Not coming').length;
-  const noResponseCount = responses.filter(r => r.response === null).length;
+  // Deprecated local counts from paginated data; totals come from loadAllResponses
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-4xl animate-bounce">🎄</div>
+      <div className="min-h-screen flex flex-col">
+        <Snowflakes />
+        <div className="flex-1 flex items-center justify-center">
+          <LogoIcon className="w-24 h-24 animate-pulse" />
+        </div>
       </div>
     );
   }
@@ -237,6 +265,12 @@ export default function AdminPage() {
                   value={newEmail}
                   onChange={(e) => setNewEmail(e.target.value)}
                   placeholder="guest@example.com"
+                  onInvalid={(e) => {
+                    (e.currentTarget as HTMLInputElement).setCustomValidity('Please enter a valid email address.');
+                  }}
+                  onInput={(e) => {
+                    (e.currentTarget as HTMLInputElement).setCustomValidity('');
+                  }}
                   className="flex-1 px-4 py-3 rounded-lg bg-transparent border border-brand-border text-brand-text placeholder:text-brand-muted focus:outline-none focus:ring-2 focus:ring-brand-primary/40"
                   required
                 />
@@ -259,15 +293,15 @@ export default function AdminPage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
               <div className="rounded-xl p-6 text-center border border-brand-border bg-brand-card">
                 <h3 className="text-2xl font-bold mb-2">Coming</h3>
-                <p className="text-4xl font-bold text-brand-primary">{comingCount}</p>
+                <p className="text-4xl font-bold text-brand-primary">{totalComing}</p>
               </div>
               <div className="rounded-xl p-6 text-center border border-brand-border bg-brand-card">
                 <h3 className="text-2xl font-bold mb-2">Not coming</h3>
-                <p className="text-4xl font-bold text-red-400">{notComingCount}</p>
+                <p className="text-4xl font-bold text-red-400">{totalNotComing}</p>
               </div>
               <div className="rounded-xl p-6 text-center border border-brand-border bg-brand-card">
                 <h3 className="text-2xl font-bold mb-2">No Response</h3>
-                <p className="text-4xl font-bold text-brand-muted">{noResponseCount}</p>
+                <p className="text-4xl font-bold text-brand-muted">{totalNoResponse}</p>
               </div>
             </div>
 
@@ -275,7 +309,7 @@ export default function AdminPage() {
               <h2 className="text-3xl font-bold text-brand-text mb-6">All Responses</h2>
               {loadingResponses ? (
                 <div className="text-center py-8">
-                  <div className="text-4xl animate-bounce">🎄</div>
+                  <LogoIcon className="w-16 h-16 animate-pulse mx-auto" />
                 </div>
               ) : (
                 <>
@@ -311,6 +345,29 @@ export default function AdminPage() {
                                 ? new Date(response.updated_at).toLocaleString()
                                 : '—'}
                             </td>
+                            <td className="px-6 py-4 border-b border-brand-border/40 text-right">
+                              <button
+                                onClick={async () => {
+                                  const confirmDelete = window.confirm(`Delete ${response.email}?`);
+                                  if (!confirmDelete) return;
+                                  try {
+                                    const { error } = await supabase.from('responses').delete().eq('email', response.email);
+                                    if (error) throw error;
+                                    // reload current page after delete
+                                    loadResponses(currentPage);
+                                    loadAllResponses();
+                                  } catch (err) {
+                                    console.error('Delete error:', err);
+                                    alert('Failed to delete this email. Please try again.');
+                                  }
+                                }}
+                                className="btn-outline px-3 py-2"
+                                aria-label={`Delete ${response.email}`}
+                                title="Delete"
+                              >
+                                ✕
+                              </button>
+                            </td>
                           </tr>
                         ))}
                       </tbody>
@@ -327,7 +384,7 @@ export default function AdminPage() {
                       <button
                         onClick={() => handlePageChange(currentPage - 1)}
                         disabled={currentPage === 1}
-                        className="btn-outline disabled:opacity-50 disabled:cursor-not-allowed px-4 py-2"
+                        className="btn-outline disabled:opacity-50 disabled:cursor-not-allowed px-4 py-2 hover:border-[#00C4B4] transition  "
                       >
                         Previous
                       </button>
@@ -337,7 +394,7 @@ export default function AdminPage() {
                       <button
                         onClick={() => handlePageChange(currentPage + 1)}
                         disabled={currentPage === totalPages || totalCount === 0}
-                        className="btn-outline disabled:opacity-50 disabled:cursor-not-allowed px-4 py-2"
+                        className="btn-outline disabled:opacity-50 disabled:cursor-not-allowed px-4 py-2 hover:border-solid hover:border-[#00C4B4] transition"
                       >
                         Next
                       </button>
