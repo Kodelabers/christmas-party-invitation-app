@@ -1,4 +1,4 @@
-# 🎄 CodeMas 2025 – KodeLab & Neyho Christmas Party
+# 🎄 KodeLab & Neyho Christmas Party
 
 An online invitation and RSVP system for the joint Christmas party of KodeLab and Neyho.
 
@@ -53,7 +53,7 @@ Stores admin user credentials for accessing the admin dashboard.
 | Column | Type | Description |
 |--------|------|-------------|
 | `email` | text (primary key) | Admin email address |
-| `password` | text | Admin password (plain text - for demo purposes) |
+| `password` | text | Admin password |
 
 **Note:** In production, consider using proper authentication with hashed passwords.
 
@@ -117,8 +117,3 @@ https://your-app.vercel.app?email=guest@example.com
 - **Supabase** for database
 - **TailwindCSS** for styling
 - **React** for UI
-
-## 📄 License
-
-Made with ❤️ by the Neyho & KodeLab Teams
-

@@ -16,7 +16,6 @@ function HomeContent() {
   const router = useRouter();
   const [email, setEmail] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  const [isValid, setIsValid] = useState(false);
   const [currentResponse, setCurrentResponse] = useState<Response | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [showChangeConfirm, setShowChangeConfirm] = useState(false);
@@ -26,30 +25,24 @@ function HomeContent() {
     const emailParam = searchParams.get('email');
     if (emailParam) {
       setEmail(emailParam);
-      checkEmail(emailParam);
+      ensureInvite(emailParam);
     } else {
       setLoading(false);
-      setIsValid(false);
     }
   }, [searchParams]);
 
-  const checkEmail = async (emailToCheck: string) => {
+  const ensureInvite = async (emailToEnsure: string) => {
     try {
-      const { data, error } = await supabase
+      const nowIso = new Date().toISOString();
+      await supabase
         .from('responses')
-        .select('*')
-        .eq('email', emailToCheck)
-        .single();
+        .upsert({ email: emailToEnsure, response: null, updated_at: nowIso }, { onConflict: 'email', ignoreDuplicates: true });
 
-      if (error || !data) {
-        setIsValid(false);
-      } else {
-        setIsValid(true);
-        setCurrentResponse(data.response);
-      }
+      const { data, error } = await supabase.from('responses').select('*').eq('email', emailToEnsure).single();
+      if (error) throw error;
+      setCurrentResponse(data?.response ?? null);
     } catch (error) {
-      console.error('Error checking email:', error);
-      setIsValid(false);
+      console.error('Error ensuring invite:', error);
     } finally {
       setLoading(false);
     }
@@ -98,24 +91,7 @@ function HomeContent() {
     );
   }
 
-  if (!isValid) {
-    return (
-      <div className="min-h-screen flex flex-col">
-        <Snowflakes />
-        <div className="flex-1 flex items-center justify-center px-4">
-          <div className="text-center card p-8 max-w-md w-full">
-            <Header />
-            <div className="mt-4">
-              <p className="text-xl md:text-2xl text-red-400 font-semibold mb-2">
-                This invitation is not valid!
-              </p>
-              <p className="text-brand-muted">Please contact the organizers if you believe this is a mistake.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
+
 
   return (
     <div className="min-h-screen flex flex-col">

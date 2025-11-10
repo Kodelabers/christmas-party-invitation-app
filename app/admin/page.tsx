@@ -7,6 +7,9 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Snowflakes from '@/components/Snowflakes';
 import LogoIcon from '@/components/LogoIcon';
+import bcrypt from 'bcryptjs';
+import { getHash } from '@/lib/hashUtils';
+import NeyhoLogo from '@/components/NeyhoLogo';
 
 export default function AdminPage() {
   const router = useRouter();
@@ -27,6 +30,7 @@ export default function AdminPage() {
   const [addEmailError, setAddEmailError] = useState('');
   const [addEmailSuccess, setAddEmailSuccess] = useState('');
 
+
   useEffect(() => {
     checkAuth();
   }, []);
@@ -46,15 +50,37 @@ export default function AdminPage() {
     setLoginError('');
 
     try {
-      // Check if admin exists
+      // Fetch admin by email
       const { data, error } = await supabase
         .from('admins')
         .select('*')
         .eq('email', email)
-        .eq('password', password)
         .single();
 
       if (error || !data) {
+        setLoginError('Invalid email or password');
+        return;
+      }
+
+      // Prefer hashed passwords if present; fallback to legacy plain-text field for compatibility
+      const passwordHash: string | undefined = (data as any).password_hash;
+      //const passwordHash: string | undefined = "$2a$10$OG3XdDPccHK.SIoNS.D93O0JL3PBYrxbiQoi.ez7IBEvQcWbCCrVO"
+      const legacyPassword: string | undefined = (data as any).password;
+
+      console.log("HASH : ", passwordHash);
+      console.log("LEGACYPASS : ", legacyPassword);
+
+      let isValidPassword = false;
+      if (passwordHash) {
+        console.log("entered password: ", password)
+        isValidPassword = await bcrypt.compare(password, passwordHash);
+        console.log("IS VALID PASSWORD: ", isValidPassword)
+      } else if (legacyPassword) {
+        isValidPassword = legacyPassword === password;
+      }
+
+      if (!isValidPassword) {
+        console.log("IS NOT VALID");
         setLoginError('Invalid email or password');
         return;
       }
@@ -191,7 +217,7 @@ export default function AdminPage() {
         <Snowflakes />
         <div className="flex-1 flex items-center justify-center px-4 py-12">
           <div className="card card-contrast p-8 md:p-10 max-w-md w-full text-brand-text">
-            <Header />
+            <Header showLogos={false} />
             <form onSubmit={handleLogin} className="mt-4 space-y-5">
               <div>
                 <label htmlFor="email" className="block text-brand-text font-semibold mb-2">
@@ -245,7 +271,7 @@ export default function AdminPage() {
         <div className="max-w-7xl mx-auto">
           <div className="card p-8 md:p-12">
             <div className="flex justify-between items-center mb-8">
-              <Header />
+              <Header showLogos={false} />
               <button
                 onClick={handleLogout}
                 className="btn-outline border-solid border-[#00C4B4] text-[#00C4B4] bg-[#07090D] hover:text-[#07090D] hover:bg-[#00C4B4] transition"
@@ -308,7 +334,7 @@ export default function AdminPage() {
             <div className="mt-8">
               <h2 className="text-3xl font-bold text-brand-text mb-6">All Responses</h2>
               {loadingResponses ? (
-                <div className="text-center py-8">
+                <div className="text-center py-8 justify-center">
                   <LogoIcon className="w-16 h-16 animate-pulse mx-auto" />
                 </div>
               ) : (
@@ -320,6 +346,7 @@ export default function AdminPage() {
                           <th className="px-6 py-4 text-left font-semibold">Email</th>
                           <th className="px-6 py-4 text-left font-semibold">Response</th>
                           <th className="px-6 py-4 text-left font-semibold">Updated At</th>
+                          <th className="px-6 py-4 text-center font-semibold">Delete</th>
                         </tr>
                       </thead>
                       <tbody>
