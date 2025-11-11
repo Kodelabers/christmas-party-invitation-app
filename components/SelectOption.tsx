@@ -42,5 +42,4 @@ const SelectOption = ({handleResponse, submitting, setShowChangeConfirm, setNewR
             </div>
   )
 }
-
 export default SelectOption

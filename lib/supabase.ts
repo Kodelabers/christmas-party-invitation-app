@@ -7,17 +7,14 @@ console.log(supabaseUrl, supabaseAnonKey);
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-// For admin operations that require service role key
 export const supabaseAdmin = createClient(
   supabaseUrl,
   process.env.SUPABASE_SERVICE_ROLE_KEY || supabaseAnonKey
 );
 
 export type Response = 'Coming' | 'Not coming' | null;
-
 export interface ResponseRecord {
   email: string;
   response: Response;
   updated_at: string;
 }
-

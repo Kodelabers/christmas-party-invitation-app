@@ -11,5 +11,4 @@ const DateAndLocation = () => {
           </div>
   )
 }
-
 export default DateAndLocation

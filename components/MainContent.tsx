@@ -1,7 +1,7 @@
 "use client"
 
 import React, { Suspense } from 'react'
-import LogoIcon from './LogoIcon'
+import LogoIcon from './KodelabIcon'
 import Snowflakes from './Snowflakes'
 import HomeContent from './HomeContent'
 
@@ -19,5 +19,4 @@ const MainContent = () => {
       </Suspense>
   )
 }
-
 export default MainContent

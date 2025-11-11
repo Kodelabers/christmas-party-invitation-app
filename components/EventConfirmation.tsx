@@ -11,7 +11,7 @@ const EventConfirmation = ({handleResponse, submitting, email} : EventConfirmati
 if (!email) {
     return (
         <>
-            <p className='text-base md:text-lg text-brand-muted mb-6'> Missing email address! </p>
+            <p className='text-base md:text-xl text-red-500 mb-6 mt-6'> Missing email address! </p>
         </>
     )
 }
@@ -48,5 +48,4 @@ if (!email) {
   </div>
   )
 }
-
 export default EventConfirmation

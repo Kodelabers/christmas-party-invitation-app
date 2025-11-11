@@ -1,4 +1,4 @@
-import LogoIcon from './LogoIcon';
+import LogoIcon from './KodelabIcon';
 import NeyhoLogo from './NeyhoLogo';
 
 export default function Header({ showLogos = true }: { showLogos?: boolean }) {
@@ -21,4 +21,3 @@ export default function Header({ showLogos = true }: { showLogos?: boolean }) {
     </header>
   );
 }
-

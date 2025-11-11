@@ -40,5 +40,4 @@ const ChangeAnswer = ({email, currentResponse, setShowChangeConfirm}: ChangeAnsw
   </div>
   )
 }
-
 export default ChangeAnswer

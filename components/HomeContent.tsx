@@ -8,7 +8,7 @@ import DateAndLocation from "./DateAndLocation";
 import EventConfirmation from "./EventConfirmation";
 import Footer from "./Footer";
 import Header from "./Header";
-import LogoIcon from "./LogoIcon";
+import LogoIcon from "./KodelabIcon";
 import SelectOption from "./SelectOption";
 import Snowflakes from "./Snowflakes";
 
@@ -61,7 +61,6 @@ const HomeContent = () => {
   const handleResponse = async (response: string) => {
     if (!email) return;
 
-    // If user already responded, show confirmation
     if (currentResponse !== null && !showChangeConfirm) {
       setNewResponse(response);
       setShowChangeConfirm(true);
@@ -80,11 +79,10 @@ const HomeContent = () => {
 
       if (error) throw error;
 
-      // Redirect to success page
       router.push(`/success?response=${response}&email=${encodeURIComponent(email)}`);
     } catch (error) {
       console.error("Error saving response:", error);
-      alert("Greška pri čuvanju odgovora. Molimo pokušajte ponovo.");
+      alert("Error saving response. Please try again.");
     } finally {
       setSubmitting(false);
     }
@@ -138,5 +136,4 @@ const HomeContent = () => {
     </div>
   );
 };
-
 export default HomeContent;

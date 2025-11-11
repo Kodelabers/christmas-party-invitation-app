@@ -5,7 +5,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Snowflakes from '@/components/Snowflakes';
-import LogoIcon from '@/components/LogoIcon';
+import LogoIcon from '@/components/KodelabIcon';
 import { type Response } from '@/lib/supabase';
 
 const EVENT_DATE_TEXT = '04.12.2025. | 19:00h';
@@ -26,7 +26,6 @@ function SuccessContent() {
       setResponse(responseParam as Response);
       setEmail(emailParam);
     } else {
-      // Redirect to home if invalid
       router.push('/');
     }
   }, [searchParams, router]);
@@ -157,4 +156,3 @@ export default function SuccessPage() {
     </Suspense>
   );
 }
-

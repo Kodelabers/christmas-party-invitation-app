@@ -6,7 +6,7 @@ import { supabase, type ResponseRecord } from '@/lib/supabase';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Snowflakes from '@/components/Snowflakes';
-import LogoIcon from '@/components/LogoIcon';
+import LogoIcon from '@/components/KodelabIcon';
 import bcrypt from 'bcryptjs';
 import { getHash } from '@/lib/hashUtils';
 import NeyhoLogo from '@/components/NeyhoLogo';
@@ -50,7 +50,6 @@ export default function AdminPage() {
     setLoginError('');
 
     try {
-      // Fetch admin by email
       const { data, error } = await supabase
         .from('admins')
         .select('*')
@@ -62,9 +61,7 @@ export default function AdminPage() {
         return;
       }
 
-      // Prefer hashed passwords if present; fallback to legacy plain-text field for compatibility
       const passwordHash: string | undefined = (data as any).password_hash;
-      //const passwordHash: string | undefined = "$2a$10$OG3XdDPccHK.SIoNS.D93O0JL3PBYrxbiQoi.ez7IBEvQcWbCCrVO"
       const legacyPassword: string | undefined = (data as any).password;
 
       console.log("HASH : ", passwordHash);
@@ -85,7 +82,6 @@ export default function AdminPage() {
         return;
       }
 
-      // Set authentication
       sessionStorage.setItem('admin_authenticated', 'true');
       setIsAuthenticated(true);
       loadResponses(1);
@@ -133,7 +129,6 @@ export default function AdminPage() {
     }
   };
 
-  // Load total counts across the entire table (ignores pagination)
   const loadAllResponses = async () => {
     try {
       const [comingRes, notComingRes, noRespRes] = await Promise.all([
@@ -198,8 +193,6 @@ export default function AdminPage() {
     }
   };
 
-  // Deprecated local counts from paginated data; totals come from loadAllResponses
-
   if (loading) {
     return (
       <div className="min-h-screen flex flex-col">
@@ -217,6 +210,10 @@ export default function AdminPage() {
         <Snowflakes />
         <div className="flex-1 flex items-center justify-center px-4 py-12">
           <div className="card card-contrast p-8 md:p-10 max-w-md w-full text-brand-text">
+            <div className="flex items-center justify-between gap-4 mb-4">
+              <LogoIcon className="w-16 h-16" />
+              <NeyhoLogo className="w-20 h-auto opacity-90" />
+            </div>
             <Header showLogos={false} />
             <form onSubmit={handleLogin} className="mt-4 space-y-5">
               <div>
@@ -380,7 +377,6 @@ export default function AdminPage() {
                                   try {
                                     const { error } = await supabase.from('responses').delete().eq('email', response.email);
                                     if (error) throw error;
-                                    // reload current page after delete
                                     loadResponses(currentPage);
                                     loadAllResponses();
                                   } catch (err) {
