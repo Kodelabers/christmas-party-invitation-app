@@ -13,7 +13,7 @@ type SnowflakeConfig = {
 
 export default function Snowflakes() {
   const flakes = useMemo<SnowflakeConfig[]>(() => {
-    const count = 24;
+    const count = 34;
     return Array.from({ length: count }, (_, id) => {
 
       const delay = Math.random() * 0.8;
@@ -28,13 +28,13 @@ export default function Snowflakes() {
         delay: `${finalDelay}s`,
         duration: `${duration}s`,
         size: `${12 + Math.random() * 28}px`,
-        opacity: 0.15 + Math.random() * 0.2,
+        opacity: 0.3 + Math.random() * 0.25,
       };
     });
   }, []);
 
   return (
-    <div className="pointer-events-none fixed inset-0 overflow-hidden -z-10 opacity-30">
+    <div className="pointer-events-none fixed inset-0 overflow-hidden -z-10 opacity-40">
       {flakes.map(({ id, left, delay, duration, size, opacity }) => (
         <span
           key={id}

@@ -1,24 +1,15 @@
 export default function LogoIcon({ className = "w-12 h-12" }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 512 512"
-      xmlns="http://www.w3.org/2000/svg"
-      role="img"
-      aria-hidden="true"
-      className={className}
-    >
-      <defs>
-        <linearGradient id="logo-bg" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#07101B" />
-          <stop offset="100%" stopColor="#0B1220" />
-        </linearGradient>
-      </defs>
-      <rect x="16" y="16" width="480" height="480" rx="128" fill="url(#logo-bg)" />
-      {/* Left chevron */}
-      <path d="M220 160 L140 256 L220 352" fill="none" stroke="#00ACBA" strokeWidth="64" strokeLinecap="round" strokeLinejoin="round" />
-      {/* Right chevron */}
-      <path d="M292 160 L372 256 L292 352" fill="none" stroke="#B3D342" strokeWidth="64" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
+	return (
+		<svg
+			viewBox="0 0 891.42 608.11"
+			xmlns="http://www.w3.org/2000/svg"
+			role="img"
+			aria-hidden="true"
+			className={className}
+		>
+			<polygon fill="#00acba" points="209.3 304.06 408.71 104.65 304.06 0 104.65 199.4 0 304.06 104.65 408.71 304.06 608.11 408.71 503.46 209.3 304.06" />
+			<polygon fill="#b3d342" points="682.11 304.06 482.71 503.46 587.36 608.11 786.76 408.71 891.42 304.06 786.76 199.4 587.36 0 482.71 104.65 682.11 304.06" />
+		</svg>
+	);
 }
 

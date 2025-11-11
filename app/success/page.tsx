@@ -53,7 +53,7 @@ function SuccessContent() {
             <div className="rounded-lg border border-brand-border/50 bg-brand-card/40 p-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-left">
                 <div>
-                  <p className="text-sm text-brand-muted text-center">Date & time</p>
+                  <p className="text-sm text-brand-muted text-center">Date & Time</p>
                   <p className="text-base text-brand-text font-semibold text-center">{EVENT_DATE_TEXT}</p>
                 </div>
                 <div>
@@ -129,7 +129,7 @@ function SuccessContent() {
                 onClick={() => router.push(`/?email=${email || ''}`)}
                 className="btn-outline hover:border-solid hover:border-[#00C4B4] transition"
               >
-                Back to Invitation
+                Change response
               </button>
             </div>
           </div>

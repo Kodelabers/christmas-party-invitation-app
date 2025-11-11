@@ -15,10 +15,13 @@ const ChangeAnswer = ({email, currentResponse, setShowChangeConfirm}: ChangeAnsw
 
   return (
     <div className="mt-8 space-y-6">
-    <p className="text-xl md:text-2xl text-brand-text font-semibold mb-6">
-      You already responded: {currentResponse === 'Coming' ? 'Yes' : 'No'}. 
-      Do you want to change your answer?
-    </p>
+    <div className="text-xl md:text-2xl text-brand-text font-semibold mb-6 leading-snug">
+      <p>You already responded:</p>
+      <p className={`${currentResponse === 'Coming' ? 'text-[#b3d342]' : 'text-red-500'}`}>
+        {currentResponse === 'Coming' ? 'Yes' : 'No'}
+      </p>
+      <p>Do you want to change your answer?</p>
+    </div>
     <div className="flex flex-col sm:flex-row gap-3 justify-center">
       <button
         onClick={() => setShowChangeConfirm(true)}
