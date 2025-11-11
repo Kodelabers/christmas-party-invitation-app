@@ -27,6 +27,8 @@ export default function AdminPage() {
   const [newEmail, setNewEmail] = useState('');
   const [addEmailError, setAddEmailError] = useState('');
   const [addEmailSuccess, setAddEmailSuccess] = useState('');
+  const [showFilters, setShowFilters] = useState(false);
+  const [selectedFilters, setSelectedFilters] = useState<Array<'Coming'|'Not coming'|'No Response'>>(['Coming','Not coming','No Response']);
 
 
   useEffect(() => {
@@ -323,7 +325,40 @@ export default function AdminPage() {
             </div>
 
             <div className="mt-8">
-              <h2 className="text-3xl font-bold text-brand-text text-center mb-6">All Responses</h2>
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+                <h2 className="text-3xl font-bold text-brand-text text-center sm:text-left">All Responses</h2>
+                <div className="relative self-start sm:self-auto">
+                  <button
+                    onClick={() => setShowFilters((v) => !v)}
+                    className="btn-outline px-2 py-2 text-sm sm:px-3 sm:py-2 sm:text-md border-solid border-[#00C4B4] text-[#00C4B4] bg-[#07090D] hover:text-[#07090D] hover:bg-[#00C4B4] transition w-auto"
+                  >
+                    Filter
+                  </button>
+                  {showFilters && (
+                    <div className="absolute left-0 sm:left-auto sm:right-0 mt-2 w-56 rounded-lg border border-brand-border bg-brand-card shadow-card p-3 z-20">
+                      <p className="text-xs text-brand-muted mb-2">Show responses</p>
+                      <div className="space-y-2">
+                        {[ 'Coming','Not coming','No Response' ].map((label) => (
+                          <label key={label} className="flex items-center gap-2 text-sm text-brand-text">
+                            <input
+                              type="checkbox"
+                              checked={selectedFilters.includes(label as any)}
+                              style={{ accentColor: '#00C4B4' }}
+                              onChange={(e) => {
+                                setSelectedFilters((prev) => {
+                                  if (e.target.checked) return Array.from(new Set([ ...prev, label as any ]));
+                                  return prev.filter((x) => x !== (label as any));
+                                });
+                              }}
+                            />
+                            {label}
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
               {loadingResponses ? (
                 <div className="text-center py-8 justify-center">
                   <LogoIcon className="w-16 h-16 animate-pulse mx-auto" />
@@ -341,7 +376,21 @@ export default function AdminPage() {
                         </tr>
                       </thead>
                       <tbody>
-                        {responses.map((response, index) => (
+                        {responses
+                          .filter((r) => {
+                            const label: 'Coming'|'Not coming'|'No Response' = r.response === 'Coming'
+                              ? 'Coming'
+                              : r.response === 'Not coming'
+                                ? 'Not coming'
+                                : 'No Response';
+                            return selectedFilters.includes(label);
+                          })
+                          .sort((a, b) => {
+                            const la: 'Coming'|'Not coming'|'No Response' = a.response === 'Coming' ? 'Coming' : a.response === 'Not coming' ? 'Not coming' : 'No Response';
+                            const lb: 'Coming'|'Not coming'|'No Response' = b.response === 'Coming' ? 'Coming' : b.response === 'Not coming' ? 'Not coming' : 'No Response';
+                            return selectedFilters.indexOf(la) - selectedFilters.indexOf(lb);
+                          })
+                          .map((response, index) => (
                           <tr
                             key={response.email}
                             className={index % 2 === 0 ? 'bg-black/10' : 'bg-transparent'}
@@ -355,7 +404,7 @@ export default function AdminPage() {
                               ) : response.response === 'Not coming' ? (
                                 <span className="text-red-400 font-semibold">Not coming</span>
                               ) : (
-                                <span className="text-brand-muted">—</span>
+                                <span className="text-brand-muted">No response</span>
                               )}
                             </td>
                             <td className="px-4 sm:px-6 py-3 sm:py-4 border-b border-brand-border/40 text-xs sm:text-sm md:text-base">

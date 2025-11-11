@@ -1,14 +1,6 @@
-<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#07101B"/>
-      <stop offset="100%" stop-color="#0B1220"/>
-    </linearGradient>
-  </defs>
-  <rect x="16" y="16" width="480" height="480" rx="128" fill="url(#bg)"/>
-  <!-- Left chevron -->
-  <path d="M220 160 L140 256 L220 352" fill="none" stroke="#00ACBA" stroke-width="64" stroke-linecap="round" stroke-linejoin="round"/>
-  <!-- Right chevron -->
-  <path d="M292 160 L372 256 L292 352" fill="none" stroke="#B3D342" stroke-width="64" stroke-linecap="round" stroke-linejoin="round"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 891.42 608.11">
+  <rect x="0" y="0" width="891.42" height="608.11" rx="120" fill="#0B1220"/>
+  <polygon fill="#00acba" points="209.3 304.06 408.71 104.65 304.06 0 104.65 199.4 0 304.06 104.65 408.71 304.06 608.11 408.71 503.46 209.3 304.06"/>
+  <polygon fill="#b3d342" points="682.11 304.06 482.71 503.46 587.36 608.11 786.76 408.71 891.42 304.06 786.76 199.4 587.36 0 482.71 104.65 682.11 304.06"/>
 </svg>
 
