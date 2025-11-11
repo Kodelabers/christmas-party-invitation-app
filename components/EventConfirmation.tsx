@@ -22,7 +22,7 @@ if (!email) {
       Are you coming to the party?
     </h2>
     <p className="text-base md:text-lg text-brand-muted mb-6">
-      Please let us know if you'll join the celebration.
+     {"Please let us know if you'll join the celebration."}
     </p>
     
     <div className="flex flex-col sm:flex-row gap-3 justify-center">
