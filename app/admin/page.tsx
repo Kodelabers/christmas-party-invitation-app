@@ -266,23 +266,25 @@ export default function AdminPage() {
       <Snowflakes />
       <div className="flex-1 px-4 py-12">
         <div className="max-w-7xl mx-auto">
-          <div className="card p-8 md:p-12">
-            <div className="flex justify-between items-center mb-8">
+          <div className="card p-6 md:p-8">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-6">
               <Header showLogos={false} />
-              <button
-                onClick={handleLogout}
-                className="btn-outline border-solid border-[#00C4B4] text-[#00C4B4] bg-[#07090D] hover:text-[#07090D] hover:bg-[#00C4B4] transition"
-              >
-                Logout
-              </button>
+              <div className="flex justify-end">
+                <button
+                  onClick={handleLogout}
+                  className="btn-outline px-3 py-2 text-sm border-solid border-[#00C4B4] text-[#00C4B4] bg-[#07090D] hover:text-[#07090D] hover:bg-[#00C4B4] transition w-full sm:w-auto"
+                >
+                  Logout
+                </button>
+              </div>
             </div>
 
-            <div className="card bg-brand-card/60 border border-brand-border p-6 mb-8">
+            <div className="card bg-brand-card/60 border border-brand-border p-6 mb-8 text-center md:text-left">
               <h2 className="text-2xl font-semibold text-brand-text mb-4">Add guest</h2>
               <p className="text-sm text-brand-muted mb-4">
               Enter the guest’s email address to allow them access to the invitation page. Duplicate emails are ignored.
               </p>
-              <form onSubmit={handleAddEmail} className="flex flex-col sm:flex-row gap-3">
+              <form onSubmit={handleAddEmail} className="flex flex-col sm:flex-row gap-3 items-center md:items-start justify-center md:justify-start">
                 <input
                   type="email"
                   value={newEmail}
@@ -294,7 +296,7 @@ export default function AdminPage() {
                   onInput={(e) => {
                     (e.currentTarget as HTMLInputElement).setCustomValidity('');
                   }}
-                  className="flex-1 px-4 py-3 rounded-lg bg-transparent border border-brand-border text-brand-text placeholder:text-brand-muted focus:outline-none focus:ring-2 focus:ring-brand-primary/40"
+                  className="flex-1 px-4 py-3 rounded-lg bg-transparent border border-brand-border text-brand-text placeholder:text-brand-muted focus:outline-none focus:ring-2 focus:ring-brand-primary/40 w-full md:w-auto md:max-w-none max-w-md"
                   required
                 />
                 <button
@@ -313,23 +315,23 @@ export default function AdminPage() {
               )}
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-              <div className="rounded-xl p-6 text-center border border-brand-border bg-brand-card">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-8">
+              <div className="rounded-xl p-5 md:p-6 text-center border border-brand-border bg-brand-card">
                 <h3 className="text-2xl font-bold mb-2">Coming</h3>
                 <p className="text-4xl font-bold text-brand-primary">{totalComing}</p>
               </div>
-              <div className="rounded-xl p-6 text-center border border-brand-border bg-brand-card">
+              <div className="rounded-xl p-5 md:p-6 text-center border border-brand-border bg-brand-card">
                 <h3 className="text-2xl font-bold mb-2">Not coming</h3>
                 <p className="text-4xl font-bold text-red-400">{totalNotComing}</p>
               </div>
-              <div className="rounded-xl p-6 text-center border border-brand-border bg-brand-card">
+              <div className="rounded-xl p-5 md:p-6 text-center border border-brand-border bg-brand-card">
                 <h3 className="text-2xl font-bold mb-2">No Response</h3>
                 <p className="text-4xl font-bold text-brand-muted">{totalNoResponse}</p>
               </div>
             </div>
 
             <div className="mt-8">
-              <h2 className="text-3xl font-bold text-brand-text mb-6">All Responses</h2>
+              <h2 className="text-3xl font-bold text-brand-text text-center mb-6">All Responses</h2>
               {loadingResponses ? (
                 <div className="text-center py-8 justify-center">
                   <LogoIcon className="w-16 h-16 animate-pulse mx-auto" />
@@ -337,13 +339,13 @@ export default function AdminPage() {
               ) : (
                 <>
                   <div className="overflow-x-auto">
-                    <table className="w-full border-collapse rounded-lg shadow-card border border-brand-border bg-brand-card">
+                    <table className="w-full min-w-[700px] md:min-w-[760px] border-collapse rounded-lg shadow-card border border-brand-border bg-brand-card">
                       <thead className="bg-black/20">
                         <tr className="text-brand-text">
-                          <th className="px-6 py-4 text-left font-semibold">Email</th>
-                          <th className="px-6 py-4 text-left font-semibold">Response</th>
-                          <th className="px-6 py-4 text-left font-semibold">Updated At</th>
-                          <th className="px-6 py-4 text-center font-semibold">Delete</th>
+                          <th className="px-4 sm:px-6 py-3 sm:py-4 text-left font-semibold text-xs sm:text-sm">Email</th>
+                          <th className="px-4 sm:px-6 py-3 sm:py-4 text-left font-semibold text-xs sm:text-sm">Response</th>
+                          <th className="px-4 sm:px-6 py-3 sm:py-4 text-left font-semibold text-xs sm:text-sm">Updated At</th>
+                          <th className="px-4 sm:px-6 py-3 sm:py-4 text-right font-semibold text-xs sm:text-sm">Delete</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -352,10 +354,10 @@ export default function AdminPage() {
                             key={response.email}
                             className={index % 2 === 0 ? 'bg-black/10' : 'bg-transparent'}
                           >
-                            <td className="px-6 py-4 border-b border-brand-border/40">
+                            <td className="px-4 sm:px-6 py-3 sm:py-4 border-b border-brand-border/40 text-xs sm:text-sm md:text-base">
                               {response.email}
                             </td>
-                            <td className="px-6 py-4 border-b border-brand-border/40">
+                            <td className="px-4 sm:px-6 py-3 sm:py-4 border-b border-brand-border/40 text-xs sm:text-sm md:text-base">
                               {response.response === 'Coming' ? (
                                 <span className="text-brand-primary font-semibold">Coming</span>
                               ) : response.response === 'Not coming' ? (
@@ -364,12 +366,12 @@ export default function AdminPage() {
                                 <span className="text-brand-muted">—</span>
                               )}
                             </td>
-                            <td className="px-6 py-4 border-b border-brand-border/40">
+                            <td className="px-4 sm:px-6 py-3 sm:py-4 border-b border-brand-border/40 text-xs sm:text-sm md:text-base">
                               {response.updated_at
                                 ? new Date(response.updated_at).toLocaleString()
                                 : '—'}
                             </td>
-                            <td className="px-6 py-4 border-b border-brand-border/40 text-right">
+                            <td className="px-4 sm:px-6 py-3 sm:py-4 border-b border-brand-border/40 text-right">
                               <button
                                 onClick={async () => {
                                   const confirmDelete = window.confirm(`Delete ${response.email}?`);

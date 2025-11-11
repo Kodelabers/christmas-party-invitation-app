@@ -1,8 +1,6 @@
 # 🎄 KodeLab & Neyho Christmas Party
 
-An online invitation and RSVP system for the joint Christmas party of KodeLab and Neyho.
-
-## 🚀 Getting Started
+An online invitation and RSVP system for the Christmas party of KodeLab and Neyho.
 
 ### Prerequisites
 
@@ -21,7 +19,6 @@ npm install
    - Fill in your Supabase credentials:
      - `NEXT_PUBLIC_SUPABASE_URL`: Your Supabase project URL
      - `NEXT_PUBLIC_SUPABASE_ANON_KEY`: Your Supabase anonymous key
-     - `SUPABASE_SERVICE_ROLE_KEY`: Your Supabase service role key (for admin operations)
 
 3. Set up the Supabase database:
    - Run the SQL script in `supabase-setup.sql` in your Supabase SQL editor
@@ -43,7 +40,7 @@ Stores RSVP responses from invited guests.
 | Column | Type | Description |
 |--------|------|-------------|
 | `email` | text (primary key) | Email address of the invited guest |
-| `response` | text (nullable) | Response: `'Dolazim'`, `'Ne dolazim'`, or `null` |
+| `response` | text (nullable) | Response: `'Coming'`, `'Not coming'`, or `null` |
 | `updated_at` | timestamp | Last update timestamp |
 
 ### `admins` Table
@@ -64,21 +61,18 @@ Stores admin user credentials for accessing the admin dashboard.
 - Validates email from URL query parameter
 - Shows RSVP form for valid invited emails
 - Allows updating responses
-- Displays "invalid invitation" message for uninvited emails
 
 ### Admin Dashboard
 
 - Protected login at `/admin`
 - View all responses in a table
-- See counters for "Dolazim", "Ne dolazim", and "No Response"
+- See counters for "Coming", "Not coming", and "No Response"
 - Logout functionality
 
 ## 🎨 Design
 
-- Festive Christmas theme with red and green color palette
 - Animated snowflake background
 - Responsive design for mobile and desktop
-- Warm and friendly UI
 
 ## 🚢 Deployment on Vercel
 
@@ -87,7 +81,6 @@ Stores admin user credentials for accessing the admin dashboard.
 3. Add environment variables in Vercel dashboard:
    - `NEXT_PUBLIC_SUPABASE_URL`
    - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-   - `SUPABASE_SERVICE_ROLE_KEY`
 4. Deploy!
 
 After deployment, invitation links will look like:
