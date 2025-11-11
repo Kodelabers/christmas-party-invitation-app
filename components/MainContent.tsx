@@ -1,9 +1,9 @@
 "use client"
 
-import React, { Suspense } from 'react'
+import { Suspense } from 'react'
+import HomeContent from './HomeContent'
 import LogoIcon from './KodelabIcon'
 import Snowflakes from './Snowflakes'
-import HomeContent from './HomeContent'
 
 const MainContent = () => {
   return (

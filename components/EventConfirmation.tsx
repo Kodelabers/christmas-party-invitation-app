@@ -1,4 +1,3 @@
-import React from 'react'
 
 type EventConfirmationProps = {
     handleResponse: (response: string) => Promise<void>

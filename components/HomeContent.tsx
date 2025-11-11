@@ -1,8 +1,8 @@
 "use client";
 
 import { supabase } from "@/lib/supabase";
-import { useSearchParams, useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import ChangeAnswer from "./ChangeAnswer";
 import DateAndLocation from "./DateAndLocation";
 import EventConfirmation from "./EventConfirmation";

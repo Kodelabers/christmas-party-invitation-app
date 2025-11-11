@@ -1,18 +1,16 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { supabase, type ResponseRecord } from '@/lib/supabase';
-import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import Snowflakes from '@/components/Snowflakes';
+import Header from '@/components/Header';
 import LogoIcon from '@/components/KodelabIcon';
-import bcrypt from 'bcryptjs';
-import { getHash } from '@/lib/hashUtils';
 import NeyhoLogo from '@/components/NeyhoLogo';
+import Snowflakes from '@/components/Snowflakes';
+import { supabase, type ResponseRecord } from '@/lib/supabase';
+import bcrypt from 'bcryptjs';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 export default function AdminPage() {
-  const router = useRouter();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
   const [email, setEmail] = useState('');
@@ -64,20 +62,14 @@ export default function AdminPage() {
       const passwordHash: string | undefined = (data as any).password_hash;
       const legacyPassword: string | undefined = (data as any).password;
 
-      console.log("HASH : ", passwordHash);
-      console.log("LEGACYPASS : ", legacyPassword);
-
       let isValidPassword = false;
       if (passwordHash) {
-        console.log("entered password: ", password)
         isValidPassword = await bcrypt.compare(password, passwordHash);
-        console.log("IS VALID PASSWORD: ", isValidPassword)
       } else if (legacyPassword) {
         isValidPassword = legacyPassword === password;
       }
 
       if (!isValidPassword) {
-        console.log("IS NOT VALID");
         setLoginError('Invalid email or password');
         return;
       }

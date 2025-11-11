@@ -7,9 +7,8 @@ import Footer from '@/components/Footer';
 import Snowflakes from '@/components/Snowflakes';
 import LogoIcon from '@/components/KodelabIcon';
 import { type Response } from '@/lib/supabase';
+import { EVENT_ADDRESS_TEXT, EVENT_DATE_TEXT } from '@/lib/constants';
 
-const EVENT_DATE_TEXT = '04.12.2025. | 19:00h';
-const EVENT_ADDRESS_TEXT = 'Cebini ul. 35, 10000, Buzin';
 const MAPS_URL = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(EVENT_ADDRESS_TEXT)}`;
 
 function SuccessContent() {

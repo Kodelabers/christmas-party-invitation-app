@@ -1,5 +1,4 @@
 import { EVENT_ADDRESS_TEXT, EVENT_DATE_TEXT } from '@/lib/constants'
-import React from 'react'
 
 const DateAndLocation = () => {
   return (

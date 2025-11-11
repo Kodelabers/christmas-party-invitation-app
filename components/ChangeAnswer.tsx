@@ -1,12 +1,12 @@
 "use client";
 
 import { useRouter } from 'next/navigation';
-import React from 'react'
+import { Dispatch, SetStateAction } from 'react';
 
 type ChangeAnswerProps = {
     email: string | null;
     currentResponse: "Coming" | "Not coming";
-    setShowChangeConfirm: React.Dispatch<React.SetStateAction<boolean>>;
+    setShowChangeConfirm: Dispatch<SetStateAction<boolean>>;
 }
 
 const ChangeAnswer = ({email, currentResponse, setShowChangeConfirm}: ChangeAnswerProps) => {
