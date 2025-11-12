@@ -17,7 +17,7 @@ const ChangeAnswer = ({email, currentResponse, setShowChangeConfirm}: ChangeAnsw
     <div className="mt-8 space-y-6">
     <div className="text-xl md:text-2xl text-brand-text font-semibold mb-6 leading-snug">
       <p>You already responded:</p>
-      <p className={`${currentResponse === 'Coming' ? 'text-[#b3d342]' : 'text-red-500'}`}>
+      <p className={`${currentResponse === 'Coming' ? 'text-[#00E6D2]' : 'text-[#F87171]'}`}>
         {currentResponse === 'Coming' ? 'Yes' : 'No'}
       </p>
       <p>Do you want to change your answer?</p>
