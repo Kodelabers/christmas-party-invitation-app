@@ -7,7 +7,6 @@ import NeyhoLogo from '@/components/NeyhoLogo';
 import Snowflakes from '@/components/Snowflakes';
 import { supabase, type ResponseRecord } from '@/lib/supabase';
 import bcrypt from 'bcryptjs';
-import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 export default function AdminPage() {
@@ -24,11 +23,14 @@ export default function AdminPage() {
   const [totalComing, setTotalComing] = useState(0);
   const [totalNotComing, setTotalNotComing] = useState(0);
   const [totalNoResponse, setTotalNoResponse] = useState(0);
+  const [newFirstName, setNewFirstName] = useState('');
+  const [newLastName, setNewLastName] = useState('');
   const [newEmail, setNewEmail] = useState('');
   const [addEmailError, setAddEmailError] = useState('');
   const [addEmailSuccess, setAddEmailSuccess] = useState('');
+  const [sendingInvite, setSendingInvite] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
-  const [selectedFilters, setSelectedFilters] = useState<Array<'Coming'|'Not coming'|'No Response'>>(['Coming','Not coming','No Response']);
+  const [selectedFilters, setSelectedFilters] = useState<Array<'Coming'|'Not coming'|'No response'>>(['Coming','Not coming','No response']);
 
 
   useEffect(() => {
@@ -128,7 +130,7 @@ export default function AdminPage() {
       const [comingRes, notComingRes, noRespRes] = await Promise.all([
         supabase.from('responses').select('email', { count: 'exact', head: true }).eq('response', 'Coming'),
         supabase.from('responses').select('email', { count: 'exact', head: true }).eq('response', 'Not coming'),
-        supabase.from('responses').select('email', { count: 'exact', head: true }).is('response', null),
+        supabase.from('responses').select('email', { count: 'exact', head: true }).eq('response', 'No response'),
       ]);
 
       setTotalComing(comingRes.count ?? 0);
@@ -154,6 +156,11 @@ export default function AdminPage() {
     setAddEmailError('');
     setAddEmailSuccess('');
 
+    if (!newFirstName.trim() || !newLastName.trim()) {
+      setAddEmailError('Please provide both first and last name.');
+      return;
+    }
+
     const trimmedEmail = newEmail.trim().toLowerCase();
     const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
 
@@ -163,27 +170,35 @@ export default function AdminPage() {
     }
 
     try {
-      const { error } = await supabase
-        .from('responses')
-        .insert({ email: trimmedEmail, response: null, updated_at: new Date().toISOString() });
+      setSendingInvite(true);
+      const res = await fetch('/api/invite', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: trimmedEmail,
+          first_name: newFirstName.trim(),
+          last_name: newLastName.trim(),
+        }),
+      });
 
-      if (error) {
-        if (error.code === '23505') {
-          setAddEmailError('This email is already invited.');
-        } else {
-          console.error('Add email error:', error);
-          setAddEmailError('Unable to add this email right now. Please try again.');
-        }
+      const result = await res.json();
+
+      if (!res.ok) {
+        setAddEmailError(result?.message || 'Unable to send the invitation right now.');
         return;
       }
 
-      setAddEmailSuccess('Email added successfully.');
+      setAddEmailSuccess('Invitation email sent successfully.');
       setNewEmail('');
+      setNewFirstName('');
+      setNewLastName('');
       loadResponses(1);
       loadAllResponses();
     } catch (err) {
       console.error('Add email error:', err);
-      setAddEmailError('Unable to add this email right now. Please try again.');
+      setAddEmailError('Unable to send the invitation right now. Please try again.');
+    } finally {
+      setSendingInvite(false);
     }
   };
 
@@ -278,7 +293,25 @@ export default function AdminPage() {
               <p className="text-sm text-brand-muted mb-4">
               Enter the guest’s email address to allow them access to the invitation page. Duplicate emails are ignored.
               </p>
-              <form onSubmit={handleAddEmail} className="flex flex-col sm:flex-row gap-3 items-center md:items-start justify-center md:justify-start">
+              <form onSubmit={handleAddEmail} className="flex flex-col lg:flex-row gap-3 items-center md:items-start justify-center md:justify-start">
+                <div className="flex w-full flex-col sm:flex-row gap-3">
+                  <input
+                    type="text"
+                    value={newFirstName}
+                    onChange={(e) => setNewFirstName(e.target.value)}
+                    placeholder="First name"
+                    className="flex-1 px-4 py-3 h-[48px] rounded-lg bg-transparent border border-brand-border text-brand-text placeholder:text-brand-muted focus:outline-none focus:ring-2 focus:ring-brand-primary/40 w-full"
+                    required
+                  />
+                  <input
+                    type="text"
+                    value={newLastName}
+                    onChange={(e) => setNewLastName(e.target.value)}
+                    placeholder="Last name"
+                    className="flex-1 px-4 py-3 h-[48px] rounded-lg bg-transparent border border-brand-border text-brand-text placeholder:text-brand-muted focus:outline-none focus:ring-2 focus:ring-brand-primary/40 w-full"
+                    required
+                  />
+                </div>
                 <input
                   type="email"
                   value={newEmail}
@@ -290,15 +323,15 @@ export default function AdminPage() {
                   onInput={(e) => {
                     (e.currentTarget as HTMLInputElement).setCustomValidity('');
                   }}
-                  className="flex-1 px-4 py-3 rounded-lg bg-transparent border border-brand-border text-brand-text placeholder:text-brand-muted focus:outline-none focus:ring-2 focus:ring-brand-primary/40 w-full md:w-auto md:max-w-none max-w-md"
+                  className="flex-1 px-4 py-3 h-[48px] rounded-lg bg-transparent border border-brand-border text-brand-text placeholder:text-brand-muted focus:outline-none focus:ring-2 focus:ring-brand-primary/40 w-full md:w-auto md:max-w-none max-w-md"
                   required
                 />
                 <button
                   type="submit"
-                  className="btn-primary text-black transition px-6 py-3 disabled:opacity-50 disabled:cursor-not-allowed"
-                  disabled={loadingResponses}
+                  className="btn-primary text-black transition px-6 h-[44px] md:h-[48px] whitespace-nowrap mt-2 md:mt-0 disabled:opacity-50 disabled:cursor-not-allowed"
+                  disabled={sendingInvite}
                 >
-                  Add Email
+                  {sendingInvite ? 'Sending…' : 'Send Email'}
                 </button>
               </form>
               {addEmailError && (
@@ -319,7 +352,7 @@ export default function AdminPage() {
                 <p className="text-4xl font-bold text-red-400">{totalNotComing}</p>
               </div>
               <div className="rounded-xl p-5 md:p-6 text-center border border-brand-border bg-brand-card">
-                <h3 className="text-2xl font-bold mb-2">No Response</h3>
+                <h3 className="text-2xl font-bold mb-2">No response</h3>
                 <p className="text-4xl font-bold text-brand-muted">{totalNoResponse}</p>
               </div>
             </div>
@@ -338,7 +371,7 @@ export default function AdminPage() {
                     <div className="absolute left-0 sm:left-auto sm:right-0 mt-2 w-56 rounded-lg border border-brand-border bg-brand-card shadow-card p-3 z-20">
                       <p className="text-xs text-brand-muted mb-2">Show responses</p>
                       <div className="space-y-2">
-                        {[ 'Coming','Not coming','No Response' ].map((label) => (
+                        {[ 'Coming','Not coming','No response' ].map((label) => (
                           <label key={label} className="flex items-center gap-2 text-sm text-brand-text">
                             <input
                               type="checkbox"
@@ -369,7 +402,7 @@ export default function AdminPage() {
                     <table className="w-full min-w-[700px] md:min-w-[760px] border-collapse rounded-lg shadow-card border border-brand-border bg-brand-card">
                       <thead className="bg-black/20">
                         <tr className="text-brand-text">
-                          <th className="px-4 sm:px-6 py-3 sm:py-4 text-left font-semibold text-xs sm:text-sm">Email</th>
+                          <th className="px-4 sm:px-6 py-3 sm:py-4 text-left font-semibold text-xs sm:text-sm">Guest</th>
                           <th className="px-4 sm:px-6 py-3 sm:py-4 text-left font-semibold text-xs sm:text-sm">Response</th>
                           <th className="px-4 sm:px-6 py-3 sm:py-4 text-left font-semibold text-xs sm:text-sm">Updated At</th>
                           <th className="px-4 sm:px-6 py-3 sm:py-4 text-right font-semibold text-xs sm:text-sm">Delete</th>
@@ -378,16 +411,16 @@ export default function AdminPage() {
                       <tbody>
                         {responses
                           .filter((r) => {
-                            const label: 'Coming'|'Not coming'|'No Response' = r.response === 'Coming'
+                            const label: 'Coming'|'Not coming'|'No response' = r.response === 'Coming'
                               ? 'Coming'
                               : r.response === 'Not coming'
                                 ? 'Not coming'
-                                : 'No Response';
+                                : 'No response';
                             return selectedFilters.includes(label);
                           })
                           .sort((a, b) => {
-                            const la: 'Coming'|'Not coming'|'No Response' = a.response === 'Coming' ? 'Coming' : a.response === 'Not coming' ? 'Not coming' : 'No Response';
-                            const lb: 'Coming'|'Not coming'|'No Response' = b.response === 'Coming' ? 'Coming' : b.response === 'Not coming' ? 'Not coming' : 'No Response';
+                            const la: 'Coming'|'Not coming'|'No response' = a.response === 'Coming' ? 'Coming' : a.response === 'Not coming' ? 'Not coming' : 'No response';
+                            const lb: 'Coming'|'Not coming'|'No response' = b.response === 'Coming' ? 'Coming' : b.response === 'Not coming' ? 'Not coming' : 'No response';
                             return selectedFilters.indexOf(la) - selectedFilters.indexOf(lb);
                           })
                           .map((response, index) => (
@@ -396,7 +429,14 @@ export default function AdminPage() {
                             className={index % 2 === 0 ? 'bg-black/10' : 'bg-transparent'}
                           >
                             <td className="px-4 sm:px-6 py-3 sm:py-4 border-b border-brand-border/40 text-xs sm:text-sm md:text-base">
-                              {response.email}
+                              <div className="text-left">
+                                <p className="font-medium text-brand-text">
+                                  {[response.first_name, response.last_name].filter(Boolean).join(' ') || 'Guest'}
+                                </p>
+                                <p className="text-xs sm:text-sm text-brand-muted break-all">
+                                  {response.email}
+                                </p>
+                              </div>
                             </td>
                             <td className="px-4 sm:px-6 py-3 sm:py-4 border-b border-brand-border/40 text-xs sm:text-sm md:text-base">
                               {response.response === 'Coming' ? (
