@@ -5,6 +5,7 @@ import Header from '@/components/Header';
 import LogoIcon from '@/components/KodelabIcon';
 import NeyhoLogo from '@/components/NeyhoLogo';
 import Snowflakes from '@/components/Snowflakes';
+import DeleteConfirmModal from '@/components/DeleteConfirmModal';
 import { supabase, type ResponseRecord } from '@/lib/supabase';
 import bcrypt from 'bcryptjs';
 import { useEffect, useState } from 'react';
@@ -31,6 +32,9 @@ export default function AdminPage() {
   const [sendingInvite, setSendingInvite] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const [selectedFilters, setSelectedFilters] = useState<Array<'Coming'|'Not coming'|'No response'>>(['Coming','Not coming','No response']);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [guestToDelete, setGuestToDelete] = useState<ResponseRecord | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
 
   useEffect(() => {
@@ -149,6 +153,40 @@ export default function AdminPage() {
   const handlePageChange = (page: number) => {
     if (page < 1 || page > totalPages || page === currentPage) return;
     loadResponses(page);
+  };
+
+  const handleDeleteClick = (response: ResponseRecord) => {
+    setGuestToDelete(response);
+    setDeleteModalOpen(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!guestToDelete) return;
+
+    setIsDeleting(true);
+    try {
+      const { error } = await supabase
+        .from('responses')
+        .delete()
+        .eq('email', guestToDelete.email);
+
+      if (error) throw error;
+
+      setDeleteModalOpen(false);
+      setGuestToDelete(null);
+      loadResponses(currentPage);
+      loadAllResponses();
+    } catch (err) {
+      console.error('Delete error:', err);
+      alert('Failed to delete this email. Please try again.');
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  const handleDeleteCancel = () => {
+    setDeleteModalOpen(false);
+    setGuestToDelete(null);
   };
 
   const handleAddEmail = async (e: React.FormEvent) => {
@@ -454,20 +492,8 @@ export default function AdminPage() {
                             </td>
                             <td className="px-4 sm:px-6 py-3 sm:py-4 border-b border-brand-border/40 text-right">
                               <button
-                                onClick={async () => {
-                                  const confirmDelete = window.confirm(`Delete ${response.email}?`);
-                                  if (!confirmDelete) return;
-                                  try {
-                                    const { error } = await supabase.from('responses').delete().eq('email', response.email);
-                                    if (error) throw error;
-                                    loadResponses(currentPage);
-                                    loadAllResponses();
-                                  } catch (err) {
-                                    console.error('Delete error:', err);
-                                    alert('Failed to delete this email. Please try again.');
-                                  }
-                                }}
-                                className="btn-outline px-3 py-2"
+                                onClick={() => handleDeleteClick(response)}
+                                className="btn-outline px-3 py-2 hover:border-red-500 hover:text-red-400 transition-colors"
                                 aria-label={`Delete ${response.email}`}
                                 title="Delete"
                               >
@@ -512,6 +538,15 @@ export default function AdminPage() {
           </div>
         </div>
       </div>
+
+      <DeleteConfirmModal
+        isOpen={deleteModalOpen}
+        email={guestToDelete?.email || ''}
+        guestName={guestToDelete ? [guestToDelete.first_name, guestToDelete.last_name].filter(Boolean).join(' ') : undefined}
+        onConfirm={handleDeleteConfirm}
+        onCancel={handleDeleteCancel}
+        isDeleting={isDeleting}
+      />
     </div>
   );
 }
