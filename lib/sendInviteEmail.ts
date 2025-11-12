@@ -79,7 +79,7 @@ export async function sendInviteEmail({
             </td>
           </tr>
           <tr>
-            <td style="padding-top:32px;border-top:1px solid rgba(255,255,255,0.08);text-align:center;">
+            <td style="padding:24px 0;border-top:1px solid rgba(255,255,255,0.08);text-align:center;">
               <p style="margin:0;font-size:14px;color:#65728c;">
                 We can&apos;t wait to celebrate with you!<br/>
                 <span style="color:#00E6D2;">Kodelab</span> & <span style="color:#00E6D2;">Neyho</span> Teams
