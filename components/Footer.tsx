@@ -2,7 +2,7 @@ export default function Footer() {
   return (
     <footer className="text-center py-6 px-4 mt-6">
       <p className="text-sm text-gray-300">
-        Made by KodeLab
+        Made by Kodelab
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
