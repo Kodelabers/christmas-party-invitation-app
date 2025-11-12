@@ -51,11 +51,27 @@ export async function sendInviteEmail({
                 Hi ${fullName || 'there'},<br/><br/>
                 You&apos;re invited to join us for an unforgettable Christmas celebration party organised by <strong>KodeLab and Neyho</strong>.
               </p>
-              <div style="margin:28px 0;text-align:center;">
-                <a href="${inviteUrl}" style="display:inline-block;padding:14px 32px;border-radius:12px;background-image:linear-gradient(135deg,#00ACBA,#B3D342);color:#0B1220;font-size:16px;font-weight:600;text-decoration:none;">
-                  View Your Invitation
-                </a>
-              </div>
+              <table width="100%" cellpadding="0" cellspacing="0" style="margin:28px 0;">
+                <tr>
+                  <td align="center">
+                    <!--[if mso]>
+                    <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="${inviteUrl}" style="height:48px;v-text-anchor:middle;width:240px;" arcsize="25%" stroke="f" fillcolor="#00ACBA">
+                      <w:anchorlock/>
+                      <center style="color:#0B1220;font-family:Arial,sans-serif;font-size:16px;font-weight:600;">Confirm Your Attendance</center>
+                    </v:roundrect>
+                    <![endif]-->
+                    <!--[if !mso]><!-->
+                    <table cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;border-spacing:0;border-radius:12px;background:#00ACBA;">
+                      <tr>
+                        <td align="center" valign="middle" style="padding:14px 32px;background:#00ACBA;border-radius:12px;">
+                          <a href="${inviteUrl}" style="color:#0B1220;font-size:16px;font-weight:600;text-decoration:none;font-family:Arial,sans-serif;line-height:20px;display:block;">Confirm Your Attendance</a>
+                        </td>
+                      </tr>
+                    </table>
+                    <!--<![endif]-->
+                  </td>
+                </tr>
+              </table>
               <p style="margin:0;font-size:15px;line-height:1.6;color:#8da2c0;text-align:center;">
                 Date: <strong>04.12.2025. | 19:00h</strong><br/>
                 Address: <strong>Cebini ul. 35, Buzin | Restoran Stafas</strong>
