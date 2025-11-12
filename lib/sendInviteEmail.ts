@@ -1,7 +1,8 @@
 import sgMail from '@sendgrid/mail';
 
 const sendGridApiKey = process.env.SENDGRID_API_KEY;
-const fromEmail = process.env.SENDGRID_FROM_EMAIL || 'invitations@codemas2025.com';
+const fromEmail = process.env.SENDGRID_FROM_EMAIL;
+const replyToEmail = process.env.REPLY_TO_EMAIL;
 const appBaseUrl =
   process.env.NEXT_PUBLIC_APP_URL || 'https://christmas-party-invitation-app.vercel.app';
 
@@ -103,6 +104,7 @@ export async function sendInviteEmail({
   await sgMail.send({
     to: email,
     from: fromEmail,
+    replyTo: replyToEmail,
     subject,
     html,
   });
