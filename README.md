@@ -16,9 +16,13 @@ npm install
 
 2. Set up environment variables:
    - Copy `.env.local.example` to `.env.local`
-   - Fill in your Supabase credentials:
-     - `NEXT_PUBLIC_SUPABASE_URL`: Your Supabase project URL
-     - `NEXT_PUBLIC_SUPABASE_ANON_KEY`: Your Supabase anonymous key
+   - Fill in your credentials:
+     - `NEXT_PUBLIC_SUPABASE_URL`
+     - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+     - `SUPABASE_SERVICE_ROLE_KEY`
+     - `SENDGRID_API_KEY`
+     - `SENDGRID_FROM_EMAIL` (optional)
+     - `NEXT_PUBLIC_APP_URL` (e.g. `https://christmas-party-invitation-app.vercel.app`)
 
 3. Set up the Supabase database:
    - Run the SQL script in `supabase-setup.sql` in your Supabase SQL editor
@@ -35,38 +39,43 @@ npm run dev
 
 ### `responses` Table
 
-Stores RSVP responses from invited guests.
+Stores invited guests and their RSVP state.
 
 | Column | Type | Description |
 |--------|------|-------------|
-| `email` | text (primary key) | Email address of the invited guest |
-| `response` | text (nullable) | Response: `'Coming'`, `'Not coming'`, or `null` |
-| `updated_at` | timestamp | Last update timestamp |
+| `id` | uuid (primary key) | Unique guest ID used in the URL (UUID v4) |
+| `email` | text (unique) | Guest email address |
+| `first_name` | varchar | Guest first name |
+| `last_name` | varchar | Guest last name |
+| `response` | text | `'Coming'`, `'Not coming'`, or `'No response'` (default) |
+| `updated_at` | timestamptz | Last update timestamp |
 
 ### `admins` Table
 
-Stores admin user credentials for accessing the admin dashboard.
+Stores admin user credentials.
 
 | Column | Type | Description |
 |--------|------|-------------|
-| `email` | text (primary key) | Admin email address |
-| `password` | text | Admin password |
+| `id` | bigint (primary key) | Auto-incrementing ID |
+| `email` | text (unique) | Admin email address |
+| `password_hash` | text | Bcrypt hashed password |
 
-**Note:** In production, consider using proper authentication with hashed passwords.
+> Replace the seed admin hash in `supabase-setup.sql` before production.
 
 ## 🎯 Features
 
 ### Invitation Page
 
-- Validates email from URL query parameter
-- Shows RSVP form for valid invited emails
-- Allows updating responses
+- Guests receive a personalised link: `/{id}`
+- Greets them by name and asks for their response
+- Allows updating an existing response at any time
 
 ### Admin Dashboard
 
 - Protected login at `/admin`
-- View all responses in a table
-- See counters for "Coming", "Not coming", and "No Response"
+- Add guests (first/last name + email) and automatically send SendGrid invites
+- Filter responses (Coming / Not coming / No response)
+- View counters and manage responses (including delete)
 - Logout functionality
 
 ## 🎨 Design
@@ -81,20 +90,24 @@ Stores admin user credentials for accessing the admin dashboard.
 3. Add environment variables in Vercel dashboard:
    - `NEXT_PUBLIC_SUPABASE_URL`
    - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+   - `SUPABASE_SERVICE_ROLE_KEY`
+   - `SENDGRID_API_KEY`
+   - `SENDGRID_FROM_EMAIL` (optional)
+   - `NEXT_PUBLIC_APP_URL`
 4. Deploy!
 
 After deployment, invitation links will look like:
 ```
-https://your-app.vercel.app?email=guest@example.com
+https://your-app.vercel.app/{id}
 ```
 
 ## 📝 Usage
 
 ### Sending Invitations
 
-Send invitation links to guests in this format:
+Use the admin dashboard “Send Email” form to add guests. Each guest receives a personalised email with their invitation link (`/{id}`). You can copy a link manually by using the guest ID from the table:
 ```
-https://your-app.vercel.app?email=guest@example.com
+https://your-app.vercel.app/{id}
 ```
 
 ### Admin Access

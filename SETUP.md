@@ -21,13 +21,16 @@ Create a `.env.local` file in the root directory with:
 ```env
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
+SENDGRID_API_KEY=your_sendgrid_api_key
+SENDGRID_FROM_EMAIL=sender@example.com
+NEXT_PUBLIC_APP_URL=http://localhost:3000
 ```
 
 **Where to find these values:**
-- Go to your Supabase project dashboard
-- Navigate to Settings > API
-- Copy the "Project URL" → `NEXT_PUBLIC_SUPABASE_URL`
-- Copy the "anon public" key → `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- Supabase dashboard → Settings → API
+- SendGrid dashboard → Settings → API Keys
+- `NEXT_PUBLIC_APP_URL` should match the deployed URL guests will open
 
 ### 4. Run the Development Server
 
@@ -40,13 +43,13 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 ### 5. Test the Application
 
 1. **Test Invitation Page:**
-   - Visit: `http://localhost:3000?email=guest1@example.com`
-   - You should see the RSVP form
-   - Try responding with "Yes or "No"
+   - After seeding the database, copy a guest `id`
+   - Visit: `http://localhost:3000/{id}`
+   - You should see their personalised invite page
 
 2. **Test Admin Dashboard:**
    - Visit: `http://localhost:3000/admin`
-   - View all responses and statistics
+   - Send yourself an invite and confirm the email arrives
 
 ## 🚀 Deploying to Vercel
 

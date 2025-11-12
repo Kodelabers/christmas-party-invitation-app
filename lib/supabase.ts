@@ -10,9 +10,12 @@ export const supabaseAdmin = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY || supabaseAnonKey
 );
 
-export type Response = 'Coming' | 'Not coming' | null;
+export type Response = 'Coming' | 'Not coming' | 'No response';
 export interface ResponseRecord {
+  id: string;
   email: string;
+  first_name: string | null;
+  last_name: string | null;
   response: Response;
   updated_at: string;
 }

@@ -6,35 +6,88 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Snowflakes from '@/components/Snowflakes';
 import LogoIcon from '@/components/KodelabIcon';
-import { type Response } from '@/lib/supabase';
+import { supabase, type Response } from '@/lib/supabase';
 import { EVENT_ADDRESS_TEXT, EVENT_DATE_TEXT } from '@/lib/constants';
 
 const MAPS_URL = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(EVENT_ADDRESS_TEXT)}`;
+
+type GuestSummary = {
+  id: string;
+  first_name: string | null;
+  last_name: string | null;
+  email: string;
+};
 
 function SuccessContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [response, setResponse] = useState<Response | null>(null);
-  const [email, setEmail] = useState<string | null>(null);
+  const [guest, setGuest] = useState<GuestSummary | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
     const responseParam = searchParams.get('response');
-    const emailParam = searchParams.get('email');
-    
-    if (responseParam && (responseParam === 'Coming' || responseParam === 'Not coming')) {
-      setResponse(responseParam as Response);
-      setEmail(emailParam);
-    } else {
+    const idParam = searchParams.get('id');
+
+    if (!responseParam || !['Coming', 'Not coming'].includes(responseParam)) {
       router.push('/');
+      return;
     }
+
+    setResponse(responseParam as Response);
+
+    if (!idParam) {
+      router.push('/');
+      return;
+    }
+
+    const fetchGuest = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('responses')
+          .select('id, first_name, last_name, email')
+          .eq('id', idParam)
+          .single();
+
+        if (error || !data) {
+          setErrorMessage('This invitation link is invalid or has expired.');
+          return;
+        }
+
+        setGuest(data as GuestSummary);
+      } catch (error) {
+        console.error('Error loading guest for success page:', error);
+        setErrorMessage('Unable to load your response at this time.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchGuest();
   }, [searchParams, router]);
 
-  if (!response) {
+  if (!response || loading) {
     return (
       <div className="min-h-screen flex flex-col">
         <Snowflakes />
         <div className="flex-1 flex items-center justify-center">
           <LogoIcon className="w-24 h-24 animate-pulse" />
+        </div>
+      </div>
+    );
+  }
+
+  if (errorMessage) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <Snowflakes />
+        <div className="flex-1 flex items-center justify-center px-4">
+          <div className="text-center card card-contrast p-8 md:p-12 max-w-lg w-full">
+            <Header />
+            <p className="mt-8 text-lg text-red-400 font-semibold">{errorMessage}</p>
+            <Footer />
+          </div>
         </div>
       </div>
     );
@@ -48,20 +101,25 @@ function SuccessContent() {
       <div className="flex-1 flex items-center justify-center px-4 py-12">
         <div className="text-center card card-contrast p-8 md:p-12 max-w-xl w-full">
           <Header />
+          {isComing && guest && (
+            <p className="mt-4 text-lg text-brand-text font-semibold">
+              {[guest.first_name, guest.last_name].filter(Boolean).join(" ") || guest.email}, click on the button below to get the directions.
+            </p>
+          )}
           
           <div className="mt-8 space-y-6">
-            <div className="rounded-lg border border-brand-border/50 bg-brand-card/40 p-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-left">
-                <div>
-                  <p className="text-sm text-brand-muted text-center">Date & Time</p>
-                  <p className="text-base text-brand-text font-semibold text-center">{EVENT_DATE_TEXT}</p>
+            {isComing && (
+              <div className="rounded-lg border border-brand-border/50 bg-brand-card/40 p-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-left">
+                  <div>
+                    <p className="text-sm text-brand-muted text-center">Date & Time</p>
+                    <p className="text-base text-brand-text font-semibold text-center">{EVENT_DATE_TEXT}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-brand-muted text-center">Address</p>
+                    <p className="text-base text-brand-text font-semibold text-center">{EVENT_ADDRESS_TEXT}</p>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-sm text-brand-muted text-center">Address</p>
-                  <p className="text-base text-brand-text font-semibold text-center">{EVENT_ADDRESS_TEXT}</p>
-                </div>
-              </div>
-              {isComing && (
                 <div className="mt-8 text-center">
                   <a
                     href={MAPS_URL}
@@ -72,8 +130,8 @@ function SuccessContent() {
                     Directions
                   </a>
                 </div>
-              )}
-            </div>
+              </div>
+            )}
 
             <div className="flex justify-center mb-6">
               {isComing ? (
@@ -126,7 +184,7 @@ function SuccessContent() {
 
             <div className="mt-8">
               <button
-                onClick={() => router.push(`/?email=${email || ''}`)}
+                onClick={() => router.push(`/${guest?.id ?? ''}`)}
                 className="btn-outline hover:border-solid hover:border-[#00C4B4] transition"
               >
                 Change response
