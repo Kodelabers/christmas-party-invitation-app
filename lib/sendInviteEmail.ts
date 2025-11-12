@@ -49,7 +49,7 @@ export async function sendInviteEmail({
             <td style="padding:24px 0;">
               <p style="margin:0;font-size:16px;line-height:1.6;color:#dfe8ff;">
                 Hi ${fullName || 'there'},<br/><br/>
-                You&apos;re invited to join us for an unforgettable Christmas celebration party organised by <strong>KodeLab and Neyho</strong>.
+                You are invited to join us for an unforgettable Christmas celebration party organised by <strong>KodeLab and Neyho</strong>.
               </p>
               <table width="100%" cellpadding="0" cellspacing="0" style="margin:28px 0;">
                 <tr>
