@@ -94,7 +94,7 @@ function SuccessContent() {
   }
 
   const isComing = response === 'Coming';
-
+//return
   return (
     <div className="min-h-screen flex flex-col">
       <Snowflakes />
@@ -106,6 +106,7 @@ function SuccessContent() {
               {[guest.first_name, guest.last_name].filter(Boolean).join(" ") || guest.email}, click on the button below to get the directions.
             </p>
           )}
+          
           
           <div className="mt-8 space-y-6">
             {isComing && (
