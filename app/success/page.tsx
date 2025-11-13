@@ -67,6 +67,11 @@ function SuccessContent() {
     fetchGuest();
   }, [searchParams, router]);
 
+  const changeResponse = () => {
+    console.log("CHange response triggered");
+    router.push(`/${guest?.id ?? ''}`);
+  };
+
   if (!response || loading) {
     return (
       <div className="min-h-[100dvh] flex flex-col">
@@ -96,7 +101,7 @@ function SuccessContent() {
   const isComing = response === 'Coming';
 
   return (
-    <div className="min-h-[100dvh] flex flex-col">
+    <div className="h-[calc(100dvh)] flex flex-col">
       <Snowflakes />
       <div className="flex-1 flex flex-col min-h-0">
         <div className="flex-1 flex items-start justify-center px-4 py-12 overflow-y-auto">
@@ -186,7 +191,7 @@ function SuccessContent() {
 
               <div className="mt-8">
                 <button
-                  onClick={() => router.push(`/${guest?.id ?? ''}`)}
+                  onClick={() => changeResponse()}
                   className="btn-outline hover:border-solid hover:border-[#00C4B4] transition"
                 >
                   Change response

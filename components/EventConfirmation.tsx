@@ -9,6 +9,7 @@ type EventConfirmationProps = {
 
 const EventConfirmation = ({ handleResponse, submitting, firstName, lastName }: EventConfirmationProps) => {
   const displayName = [firstName, lastName].filter(Boolean).join(" ").trim();
+  console.log("event confirmation triggered: ", displayName);
 
   return (
     <div className="mt-8 space-y-6">

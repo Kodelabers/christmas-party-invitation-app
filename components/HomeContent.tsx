@@ -68,6 +68,8 @@ const HomeContent = ({ guestId }: HomeContentProps) => {
   const handleResponse = async (response: Response) => {
     if (!guest) return;
 
+    console.log("handleResponse triggered: ", response);
+
     const hasResponded = currentResponse === "Coming" || currentResponse === "Not coming";
     if (hasResponded && !showChangeConfirm) {
       setNewResponse(response);
@@ -122,7 +124,7 @@ const HomeContent = ({ guestId }: HomeContentProps) => {
       <div className="min-h-[100dvh] flex flex-col">
         <Snowflakes />
         <div className="flex-1 flex items-center justify-center px-4 pb-[env(safe-area-inset-bottom)]">
-          <div className="text-center card card-contrast p-8 md:p-12 max-w-lg w-full">
+          <div className="text-center card card-contrast p-8 md:p-12 max-w-lg w-full bg-brand-bg">
             <Header />
             <p className="mt-8 text-lg text-red-400 font-semibold">{errorMessage}</p>
             <Footer />

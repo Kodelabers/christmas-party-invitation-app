@@ -22,7 +22,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="antialiased">
+        <main className="min-h-[100dvh]">
         {children}
+        </main>
       </body>
     </html>
   );
