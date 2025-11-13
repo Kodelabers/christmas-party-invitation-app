@@ -16,7 +16,7 @@ export default function Header({ showLogos = true }: { showLogos?: boolean }) {
         </h1>
       </div>
       <p className="mt-4 text-base md:text-[16px] text-gray-400">
-        A Christmas celebration party by Kodelab & Neyho
+        A Christmas celebration party by KodeLab & Neyho
       </p>
     </header>
   );

@@ -43,14 +43,14 @@ export async function sendInviteEmail({
           <tr>
             <td align="center" style="padding-bottom:12px;">
               <h1 style="margin:0;font-size:28px;line-height:1.3;color:#00E6D2;">Christmas Disco Party II</h1>
-              <p style="margin:8px 0 0;font-size:16px;color:#8da2c0;">A Christmas celebration party by Kodelab & Neyho</p>
+              <p style="margin:8px 0 0;font-size:16px;color:#8da2c0;">A Christmas celebration party by KodeLab & Neyho</p>
             </td>
           </tr>
           <tr>
             <td style="padding:24px 0;">
               <p style="margin:0;font-size:16px;line-height:1.6;color:#dfe8ff;">
                 Hi ${fullName || 'there'},<br/><br/>
-                You are invited to join us for an unforgettable Christmas celebration party organised by <strong>Kodelab and Neyho</strong>.
+                You are invited to join us for an unforgettable Christmas celebration party organised by <strong>KodeLab and Neyho</strong>.
               </p>
               <table width="100%" cellpadding="0" cellspacing="0" style="margin:28px 0;">
                 <tr>
@@ -83,7 +83,7 @@ export async function sendInviteEmail({
             <td style="padding:24px 0;border-top:1px solid rgba(255,255,255,0.08);text-align:center;">
               <p style="margin:0;font-size:14px;color:#65728c;">
                 We can&apos;t wait to celebrate with you!<br/>
-                <span style="color:#00E6D2;">Kodelab</span> & <span style="color:#00E6D2;">Neyho</span> Teams
+                <span style="color:#00E6D2;">KodeLab</span> & <span style="color:#00E6D2;">Neyho</span> Teams
               </p>
             </td>
           </tr>
