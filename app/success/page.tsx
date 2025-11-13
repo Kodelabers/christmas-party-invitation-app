@@ -96,105 +96,110 @@ function SuccessContent() {
   const isComing = response === 'Coming';
 
   return (
-    <div className="min-h-[100dvh] flex flex-col overflow-y-auto">
+    <div className="min-h-[100dvh] flex flex-col">
       <Snowflakes />
-      <div className="flex-1 flex items-center justify-center px-4 py-12 pb-[calc(5rem+env(safe-area-inset-bottom))]">
-        <div className="text-center card card-contrast p-8 md:p-12 max-w-xl w-full">
-          <Header />
-          {isComing && guest && (
-            <p className="mt-4 text-lg text-brand-text font-semibold">
-              {[guest.first_name, guest.last_name].filter(Boolean).join(" ") || guest.email}, click on the button below to get the directions.
-            </p>
-          )}
-          
-          
-          <div className="mt-8 space-y-6">
-            {isComing && (
-              <div className="rounded-lg border border-brand-border/50 bg-brand-card/40 p-4">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-left">
-                  <div>
-                    <p className="text-sm text-brand-muted text-center">Date & Time</p>
-                    <p className="text-base text-brand-text font-semibold text-center">{EVENT_DATE_TEXT}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-brand-muted text-center">Address</p>
-                    <p className="text-base text-brand-text font-semibold text-center">{EVENT_ADDRESS_TEXT}</p>
-                  </div>
-                </div>
-                <div className="mt-8 text-center">
-                  <a
-                    href={MAPS_URL}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="btn-primary"
-                  >
-                    Directions
-                  </a>
-                </div>
-              </div>
+      <div className="flex-1 flex flex-col min-h-0">
+        <div className="flex-1 flex items-start justify-center px-4 py-12 overflow-y-auto">
+          <div className="text-center card card-contrast p-8 md:p-12 max-w-xl w-full my-auto">
+            <Header />
+            {isComing && guest && (
+              <p className="mt-4 text-lg text-brand-text font-semibold">
+                {[guest.first_name, guest.last_name].filter(Boolean).join(" ") || guest.email}, click on the button below to get the directions.
+              </p>
             )}
-
-            <div className="flex justify-center mb-6">
-              {isComing ? (
-                <div className="w-20 h-20 rounded-full bg-brand-primary/20 flex items-center justify-center">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    width="48"
-                    height="48"
-                    fill="none"
-                    stroke="#00E6D2"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-                    <polyline points="22 4 12 14.01 9 11.01" />
-                  </svg>
-                </div>
-              ) : (
-                <div className="w-20 h-20 rounded-full bg-red-400/20 flex items-center justify-center">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    width="48"
-                    height="48"
-                    fill="none"
-                    stroke="#f87171"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <circle cx="12" cy="12" r="10" />
-                    <line x1="15" y1="9" x2="9" y2="15" />
-                    <line x1="9" y1="9" x2="15" y2="15" />
-                  </svg>
+            
+            
+            <div className="mt-8 space-y-6">
+              {isComing && (
+                <div className="rounded-lg border border-brand-border/50 bg-brand-card/40 p-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-left">
+                    <div>
+                      <p className="text-sm text-brand-muted text-center">Date & Time</p>
+                      <p className="text-base text-brand-text font-semibold text-center">{EVENT_DATE_TEXT}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-brand-muted text-center">Address</p>
+                      <p className="text-base text-brand-text font-semibold text-center">{EVENT_ADDRESS_TEXT}</p>
+                    </div>
+                  </div>
+                  <div className="mt-8 text-center">
+                    <a
+                      href={MAPS_URL}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="btn-primary"
+                    >
+                      Directions
+                    </a>
+                  </div>
                 </div>
               )}
+
+              <div className="flex justify-center mb-6">
+                {isComing ? (
+                  <div className="w-20 h-20 rounded-full bg-brand-primary/20 flex items-center justify-center">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      width="48"
+                      height="48"
+                      fill="none"
+                      stroke="#00E6D2"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                      <polyline points="22 4 12 14.01 9 11.01" />
+                    </svg>
+                  </div>
+                ) : (
+                  <div className="w-20 h-20 rounded-full bg-red-400/20 flex items-center justify-center">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      width="48"
+                      height="48"
+                      fill="none"
+                      stroke="#f87171"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <circle cx="12" cy="12" r="10" />
+                      <line x1="15" y1="9" x2="9" y2="15" />
+                      <line x1="9" y1="9" x2="15" y2="15" />
+                    </svg>
+                  </div>
+                )}
+              </div>
+
+              <h2 className="text-3xl md:text-4xl font-bold text-brand-text mb-4">
+                {isComing ? "We're excited to see you!" : "Thank you for letting us know"}
+              </h2>
+              
+              <p className="text-lg md:text-xl text-brand-muted mb-8">
+                {isComing
+                  ? "We've received your response. We're looking forward to see you at the party!"
+                  : "We've received your response. We'll miss you at the party, but thank you for taking the time to let us know."}
+              </p>
+
+              <div className="mt-8">
+                <button
+                  onClick={() => router.push(`/${guest?.id ?? ''}`)}
+                  className="btn-outline hover:border-solid hover:border-[#00C4B4] transition"
+                >
+                  Change response
+                </button>
+              </div>
             </div>
 
-            <h2 className="text-3xl md:text-4xl font-bold text-brand-text mb-4">
-              {isComing ? "We're excited to see you!" : "Thank you for letting us know"}
-            </h2>
-            
-            <p className="text-lg md:text-xl text-brand-muted mb-8">
-              {isComing
-                ? "We've received your response. We're looking forward to see you at the party!"
-                : "We've received your response. We'll miss you at the party, but thank you for taking the time to let us know."}
-            </p>
-
-            <div className="mt-8">
-              <button
-                onClick={() => router.push(`/${guest?.id ?? ''}`)}
-                className="btn-outline hover:border-solid hover:border-[#00C4B4] transition"
-              >
-                Change response
-              </button>
+            <div className="mt-8 pb-4">
+              <Footer />
             </div>
           </div>
-
-          <Footer />
         </div>
+        <div className="h-[max(1rem,env(safe-area-inset-bottom))] flex-shrink-0"></div>
       </div>
     </div>
   );
