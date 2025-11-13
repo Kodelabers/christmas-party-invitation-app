@@ -92,11 +92,11 @@ const HomeContent = ({ guestId }: HomeContentProps) => {
       setShowChangeConfirm(false);
       setNewResponse(null);
 
-      router.push(`/success?id=${guest.id}&response=${response}`);
+      const successUrl = `${window.location.origin}/success?id=${guest.id}&response=${response}`;
+      window.location.replace(successUrl);
     } catch (error) {
       console.error("Error saving response:", error);
       alert("Error saving response. Please try again.");
-    } finally {
       setSubmitting(false);
     }
   };

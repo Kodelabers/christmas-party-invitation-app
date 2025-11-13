@@ -56,6 +56,8 @@ import plugin from "tailwindcss/plugin";
           transitionProperty: "colors, filter, box-shadow",
           transitionDuration: "150ms",
           cursor: "pointer",
+          touchAction: "manipulation",
+          WebkitTapHighlightColor: "transparent",
           "&:hover": {
             filter: "brightness(1.05)",
           },
@@ -82,6 +84,8 @@ import plugin from "tailwindcss/plugin";
           transitionProperty: "colors, background-color, box-shadow",
           transitionDuration: "150ms",
           cursor: "pointer",
+          touchAction: "manipulation",
+          WebkitTapHighlightColor: "transparent",
           "&:hover": {
             backgroundColor: brand?.card ?? "#0E1626",
           },
