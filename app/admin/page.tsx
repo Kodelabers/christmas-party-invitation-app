@@ -242,7 +242,7 @@ export default function AdminPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex flex-col">
+      <div className="min-h-[100dvh] flex flex-col">
         <Snowflakes />
         <div className="flex-1 flex items-center justify-center">
           <LogoIcon className="w-24 h-24 animate-pulse" />
@@ -253,9 +253,9 @@ export default function AdminPage() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen flex flex-col">
+      <div className="min-h-[100dvh] flex flex-col">
         <Snowflakes />
-        <div className="flex-1 flex items-center justify-center px-4 py-12">
+        <div className="flex-1 flex items-center justify-center px-4 py-12 pb-[env(safe-area-inset-bottom)]">
           <div className="card card-contrast p-8 md:p-10 max-w-md w-full text-brand-text">
             <div className="flex items-center justify-between gap-4 mb-4">
               <LogoIcon className="w-16 h-16" />
@@ -309,9 +309,9 @@ export default function AdminPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-[100dvh] flex flex-col">
       <Snowflakes />
-      <div className="flex-1 px-4 py-12">
+      <div className="flex-1 px-4 py-12 pb-[env(safe-area-inset-bottom)]">
         <div className="max-w-7xl mx-auto">
           <div className="card p-6 md:p-8">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-6">

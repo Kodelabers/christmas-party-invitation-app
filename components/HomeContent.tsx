@@ -108,7 +108,7 @@ const HomeContent = ({ guestId }: HomeContentProps) => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex flex-col">
+      <div className="min-h-[100dvh] flex flex-col">
         <Snowflakes />
         <div className="flex-1 flex items-center justify-center">
           <LogoIcon className="w-24 h-24 animate-pulse" />
@@ -119,9 +119,9 @@ const HomeContent = ({ guestId }: HomeContentProps) => {
 
   if (errorMessage || !guest) {
     return (
-      <div className="min-h-screen flex flex-col">
+      <div className="min-h-[100dvh] flex flex-col">
         <Snowflakes />
-        <div className="flex-1 flex items-center justify-center px-4">
+        <div className="flex-1 flex items-center justify-center px-4 pb-[env(safe-area-inset-bottom)]">
           <div className="text-center card card-contrast p-8 md:p-12 max-w-lg w-full">
             <Header />
             <p className="mt-8 text-lg text-red-400 font-semibold">{errorMessage}</p>
@@ -133,9 +133,9 @@ const HomeContent = ({ guestId }: HomeContentProps) => {
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-[100dvh] flex flex-col">
       <Snowflakes />
-      <div className="flex-1 flex items-center justify-center px-4 py-12">
+      <div className="flex-1 flex items-center justify-center px-4 py-12 pb-[env(safe-area-inset-bottom)]">
         <div className="text-center card card-contrast p-8 md:p-12 max-w-xl w-full">
           <Header />
           <DateAndLocation />

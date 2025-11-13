@@ -69,7 +69,7 @@ function SuccessContent() {
 
   if (!response || loading) {
     return (
-      <div className="min-h-screen flex flex-col">
+      <div className="min-h-[100dvh] flex flex-col">
         <Snowflakes />
         <div className="flex-1 flex items-center justify-center">
           <LogoIcon className="w-24 h-24 animate-pulse" />
@@ -80,7 +80,7 @@ function SuccessContent() {
 
   if (errorMessage) {
     return (
-      <div className="min-h-screen flex flex-col">
+      <div className="min-h-[100dvh] flex flex-col">
         <Snowflakes />
         <div className="flex-1 flex items-center justify-center px-4">
           <div className="text-center card card-contrast p-8 md:p-12 max-w-lg w-full">
@@ -96,9 +96,9 @@ function SuccessContent() {
   const isComing = response === 'Coming';
 
   return (
-    <div className="min-h-screen flex flex-col overflow-y-auto">
+    <div className="min-h-[100dvh] flex flex-col overflow-y-auto">
       <Snowflakes />
-      <div className="flex-1 flex items-center justify-center px-4 py-12 pb-20">
+      <div className="flex-1 flex items-center justify-center px-4 py-12 pb-[calc(5rem+env(safe-area-inset-bottom))]">
         <div className="text-center card card-contrast p-8 md:p-12 max-w-xl w-full">
           <Header />
           {isComing && guest && (
@@ -203,7 +203,7 @@ function SuccessContent() {
 export default function SuccessPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen flex flex-col">
+      <div className="min-h-[100dvh] flex flex-col">
         <Snowflakes />
         <div className="flex-1 flex items-center justify-center">
           <LogoIcon className="w-24 h-24 animate-pulse" />

@@ -13,7 +13,7 @@ const MainContent = ({ guestId }: MainContentProps) => {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen flex flex-col">
+        <div className="min-h-[100dvh] flex flex-col">
           <Snowflakes />
           <div className="flex-1 flex items-center justify-center">
             <LogoIcon className="w-24 h-24 animate-pulse" />

@@ -1,6 +1,6 @@
 export default function Footer() {
   return (
-    <footer className="text-center py-6 px-4 mt-6">
+    <footer className="text-center py-6 px-4 mt-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))]">
       <p className="text-sm text-gray-300">
         Made by KodeLab
         <svg
