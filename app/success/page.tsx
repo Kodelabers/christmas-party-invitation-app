@@ -1,13 +1,13 @@
 'use client';
 
-import { useEffect, useState, Suspense } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
-import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import Snowflakes from '@/components/Snowflakes';
+import Header from '@/components/Header';
 import LogoIcon from '@/components/KodelabIcon';
-import { supabase, type Response } from '@/lib/supabase';
+import Snowflakes from '@/components/Snowflakes';
 import { EVENT_ADDRESS_TEXT, EVENT_DATE_TEXT } from '@/lib/constants';
+import { supabase, type Response } from '@/lib/supabase';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Suspense, useEffect, useState } from 'react';
 
 const MAPS_URL = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(EVENT_ADDRESS_TEXT)}`;
 
@@ -67,8 +67,8 @@ function SuccessContent() {
     fetchGuest();
   }, [searchParams, router]);
 
-  const changeResponse = () => {
-    console.log("CHange response triggered");
+  const changeResponse = async () => {
+    console.log("Change response triggered");
     router.push(`/${guest?.id ?? ''}`);
   };
 
