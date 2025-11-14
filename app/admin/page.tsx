@@ -311,9 +311,9 @@ export default function AdminPage() {
   return (
     <div className="min-h-[100dvh] flex flex-col">
       <Snowflakes />
-      <div className="flex-1 px-4 py-12 pb-[calc(3rem+env(safe-area-inset-bottom))]">
+      <div className="flex-1 px-4 py-12 pb-[calc(1rem+env(safe-area-inset-bottom))]">
         <div className="max-w-7xl mx-auto">
-          <div className="card p-6 md:p-8 mb-8">
+          <div className="card p-6 md:p-8 mb-4 md:mb-8">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-6">
               <Header showLogos={false} />
               <div className="flex justify-end">

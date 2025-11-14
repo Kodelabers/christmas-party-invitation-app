@@ -104,8 +104,8 @@ function SuccessContent() {
     <div className="h-[calc(100dvh)] flex flex-col">
       <Snowflakes />
       <div className="flex-1 flex flex-col min-h-0">
-        <div className="flex-1 flex items-start justify-center px-4 py-12 overflow-y-auto">
-          <div className="text-center card card-contrast p-8 md:p-12 max-w-xl w-full my-auto">
+        <div className="flex-1 flex items-start justify-center px-4 py-12 pb-[calc(1rem+env(safe-area-inset-bottom))] overflow-y-auto">
+          <div className="text-center card card-contrast p-8 md:p-12 max-w-xl w-full my-auto mb-4 md:mb-0">
             <Header />
             {isComing && guest && (
               <p className="mt-4 text-lg text-brand-text font-semibold">

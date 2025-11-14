@@ -22,7 +22,6 @@ import plugin from "tailwindcss/plugin";
           card: "#0E1626",
           border: "#122036",
           text: "#E6EEF8",
-          muted: "#9FB3C8",
           primary: "#00BCAD",
           primaryDark: "#0AC7B5",
           accent: "#7CF3E6"

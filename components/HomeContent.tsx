@@ -137,8 +137,8 @@ const HomeContent = ({ guestId }: HomeContentProps) => {
   return (
     <div className="min-h-[100dvh] flex flex-col">
       <Snowflakes />
-      <div className="flex-1 flex items-center justify-center px-4 py-12 pb-[env(safe-area-inset-bottom)]">
-        <div className="text-center card card-contrast p-8 md:p-12 max-w-xl w-full">
+      <div className="flex-1 flex items-center justify-center px-4 py-12 pb-[calc(1rem+env(safe-area-inset-bottom))]">
+        <div className="text-center card card-contrast p-8 md:p-12 max-w-xl w-full mb-4 md:mb-0">
           <Header />
           <DateAndLocation />
 
