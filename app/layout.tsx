@@ -12,7 +12,6 @@ export const viewport: Viewport = {
   maximumScale: 1,
   viewportFit: "cover",
 };
-//root layout
 
 export default function RootLayout({
   children,
