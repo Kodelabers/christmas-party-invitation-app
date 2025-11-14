@@ -33,7 +33,7 @@ export async function sendInviteEmail({
 
   const inviteUrl = `${appBaseUrl.replace(/\/$/, '')}/${inviteId}`;
   const fullName = `${firstName} ${lastName}`.trim();
-  const subject = 'Christmas Disco Party II – Your Invitation';
+  const subject = 'Home Alone Party – Your Invitation';
 
   const html = `
   <!DOCTYPE html>
@@ -43,7 +43,7 @@ export async function sendInviteEmail({
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="x-apple-disable-message-reformatting">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Christmas Disco Party II – Your Invitation</title>
+    <title>Home Alone Party – Your Invitation</title>
     <!--[if mso]>
     <noscript>
       <xml>
@@ -70,7 +70,7 @@ export async function sendInviteEmail({
           <!--<![endif]-->
             <tr>
               <td align="center" style="padding:0 0 12px 0;">
-                <h1 style="margin:0;font-size:28px;line-height:1.3;color:#00E6D2;font-weight:bold;font-family:Arial,Helvetica,sans-serif;">Christmas Disco Party II</h1>
+                <h1 style="margin:0;font-size:28px;line-height:1.3;color:#00E6D2;font-weight:bold;font-family:Arial,Helvetica,sans-serif;">Home Alone Party</h1>
                 <p style="margin:8px 0 0 0;font-size:16px;color:#8da2c0;font-family:Arial,Helvetica,sans-serif;">A Christmas celebration party by KodeLab & Neyho</p>
               </td>
             </tr>

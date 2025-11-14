@@ -12,7 +12,7 @@ export default function Header({ showLogos = true }: { showLogos?: boolean }) {
       )}
       <div className="flex items-center justify-center gap-3">
         <h1 className="text-4xl md:text-4xl font-extrabold tracking-tight ">
-        Christmas Disco Party II
+        Home Alone Party
         </h1>
       </div>
       <p className="mt-4 text-base md:text-[16px] text-gray-400">
